@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 Beta Dashboard - SITEWORLD ID</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent-cyan: #06b6d4;
+            --accent-purple: #8b5cf6;
+            --accent-green: #00ff88;
+            --accent-red: #ff4444;
+            --accent-yellow: #ffd700;
+            --border-color: #333333;
+            --shadow-glow: rgba(6, 182, 212, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: var(--bg-secondary);
+            padding: 1rem 2rem;
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .beta-badge {
+            background: linear-gradient(45deg, var(--accent-green), var(--accent-cyan));
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .logout-btn {
+            background: var(--accent-red);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .dashboard-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--accent-green), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-message {
+            background: linear-gradient(145deg, rgba(0, 255, 136, 0.1), rgba(6, 182, 212, 0.1));
+            border: 2px solid var(--accent-green);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+
+        .tab {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: linear-gradient(45deg, var(--accent-green), var(--accent-cyan));
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.3rem;
+            color: var(--accent-green);
+            margin-bottom: 1rem;
+        }
+
+        .announcement {
+            background: var(--bg-tertiary);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .announcement.info { border-left-color: var(--accent-cyan); }
+        .announcement.update { border-left-color: var(--accent-purple); }
+        .announcement.warning { border-left-color: var(--accent-yellow); }
+        .announcement.success { border-left-color: var(--accent-green); }
+
+        .announcement-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .announcement-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .announcement-date {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        .plugin-card {
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .plugin-card:hover {
+            border-color: var(--accent-green);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.2);
+        }
+
+        .plugin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .plugin-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+
+        .plugin-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .status-testing { background: var(--accent-yellow); color: #000; }
+        .status-active { background: var(--accent-green); color: #000; }
+        .status-completed { background: var(--accent-purple); color: white; }
+
+        .download-btn {
+            background: linear-gradient(45deg, var(--accent-green), var(--accent-cyan));
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, var(--accent-green), var(--accent-cyan));
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+        }
+
+        .feedback-item {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .feedback-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .feedback-type {
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .type-bug { background: var(--accent-red); color: white; }
+        .type-feedback { background: var(--accent-cyan); color: white; }
+        .type-suggestion { background: var(--accent-purple); color: white; }
+
+        .feedback-status {
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .status-pending { background: var(--accent-yellow); color: #000; }
+        .status-approved { background: var(--accent-green); color: #000; }
+        .status-rejected { background: var(--accent-red); color: white; }
+        .status-in-development { background: var(--accent-purple); color: white; }
+
+        .feedback-item.status-approved {
+            border-left: 4px solid var(--accent-green);
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .feedback-item.status-rejected {
+            border-left: 4px solid var(--accent-red);
+            background: rgba(255, 68, 68, 0.05);
+        }
+
+        .feedback-item.status-pending {
+            border-left: 4px solid var(--accent-yellow);
+            background: rgba(255, 212, 0, 0.05);
+        }
+
+        .feedback-item.status-in-development {
+            border-left: 4px solid var(--accent-purple);
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .admin-response {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid var(--accent-purple);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .admin-response h5 {
+            color: var(--accent-purple);
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 0.5rem;
+        }
+
+        .processed-info {
+            margin-top: 0.5rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        /* Ubisoft-style Top Bar */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.95), rgba(17, 17, 17, 0.95));
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 1000;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .top-bar-logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+        .top-bar-center {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .top-bar-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--accent-green);
+            transition: all 0.3s ease;
+        }
+
+        .top-bar-profile:hover {
+            background: rgba(0, 255, 136, 0.2);
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+
+        .profile-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--accent-green), var(--accent-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            min-width: 200px;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .profile-dropdown.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            color: var(--accent-green);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Adjust body padding for top bar */
+        body {
+            padding-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .navbar {
+                padding: 1rem;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .dashboard-title {
+                font-size: 2rem;
+            }
+            
+            .top-bar {
+                padding: 0 1rem;
+            }
+            
+            .top-bar-center {
+                font-size: 0.8rem;
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ubisoft-style Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-logo">
+            <img src="logo_without_bg.png" style="height: 47px; vertical-align: middle; margin-right: 0.5rem;" alt="SITEWORLD ID Logo">
+        </div>
+        <div class="top-bar-center">
+            SITEWORLD ID ✨
+        </div>
+        <div class="top-bar-profile" onclick="toggleProfileDropdown()">
+            <div class="profile-avatar" id="profileAvatar">B</div>
+            <span id="topBarUsername">Beta</span>
+            <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i>
+            <div class="profile-dropdown" id="profileDropdown">
+                <div class="dropdown-item" onclick="window.location.href='beta-dashboard.html'">
+                    🧪 Beta Dashboard
+                </div>
+                <div class="dropdown-item" onclick="window.location.href='index.html'">
+                    🏠 Homepage
+                </div>
+                <div class="dropdown-item" onclick="logout()">
+                    🚪 Logout
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-logo">🧪 BETA TESTER</div>
+        <div class="nav-user">
+            <span class="beta-badge">BETA TESTER</span>
+            <span id="betaUsername">Beta Tester</span>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Beta Tester Dashboard</h1>
+            <div class="welcome-message">
+                <h3>🚀 Benvenuto nel Beta Program!</h3>
+                <p>Hai accesso esclusivo ai plugin in development. Testa, segnala bug e aiutaci a migliorare!</p>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">3</div>
+                <div>Plugin in Test</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">12</div>
+                <div>Bug Segnalati</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">8</div>
+                <div>Download Effettuati</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">25</div>
+                <div>Giorni di Beta</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('announcements')">
+                📢 Annunci
+            </div>
+            <div class="tab" onclick="showTab('plugins')">
+                🔌 Plugin in Test
+            </div>
+            <div class="tab" onclick="showTab('feedback')">
+                🐛 Segnalazioni
+            </div>
+            <div class="tab" onclick="showTab('downloads')">
+                📥 Download
+            </div>
+        </div>
+
+        <!-- Announcements Tab -->
+        <div id="announcements" class="tab-content active">
+            <div class="card">
+                <h3>📢 Ultimi Annunci</h3>
+                <div id="announcementsList">
+                    <!-- Gli annunci verranno caricati dinamicamente -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Plugins Tab -->
+        <div id="plugins" class="tab-content">
+            <div class="card">
+                <h3>🔌 Plugin di cui sei Beta Tester</h3>
+                <div id="pluginsList">
+                    <div class="plugin-card">
+                        <div class="plugin-header">
+                            <div class="plugin-title">WP Changelog Manager PRO</div>
+                            <div class="plugin-status status-testing">🧪 IN TEST</div>
+                        </div>
+                        <p>Sistema avanzato di gestione changelog con AI integration e analytics.</p>
+                        <div style="margin-top: 1rem;">
+                            <strong>Versione Beta:</strong> v2.1.0-beta<br>
+                            <strong>Scadenza:</strong> 15/12/2025<br>
+                            <strong>Stato:</strong> Test delle nuove funzionalità AI
+                        </div>
+                    </div>
+
+                    <div class="plugin-card">
+                        <div class="plugin-header">
+                            <div class="plugin-title">WP Security Manager</div>
+                            <div class="plugin-status status-active">✅ ATTIVO</div>
+                        </div>
+                        <p>Suite completa per la sicurezza WordPress con monitoraggio in tempo reale.</p>
+                        <div style="margin-top: 1rem;">
+                            <strong>Versione Beta:</strong> v1.5.2-beta<br>
+                            <strong>Scadenza:</strong> 20/12/2025<br>
+                            <strong>Stato:</strong> Test stabilità e performance
+                        </div>
+                    </div>
+
+                    <div class="plugin-card">
+                        <div class="plugin-header">
+                            <div class="plugin-title">WP Content Optimizer</div>
+                            <div class="plugin-status status-completed">🎉 COMPLETATO</div>
+                        </div>
+                        <p>Ottimizzazione automatica contenuti con SEO suggestions powered by AI.</p>
+                        <div style="margin-top: 1rem;">
+                            <strong>Versione Beta:</strong> v1.0.0-beta<br>
+                            <strong>Test Completato:</strong> 10/11/2025<br>
+                            <strong>Release:</strong> Prevista per Gennaio 2026
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback Tab -->
+        <div id="feedback" class="tab-content">
+            <div class="card">
+                <h3>🐛 Invia Segnalazione</h3>
+                <form id="feedbackForm">
+                    <div class="form-group">
+                        <label>🎯 Tipo Segnalazione</label>
+                        <select id="feedbackType">
+                            <option value="bug">🐛 Bug Report</option>
+                            <option value="feedback">💭 Feedback Generale</option>
+                            <option value="suggestion">💡 Suggerimento</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>🔌 Plugin</label>
+                        <select id="pluginSelect">
+                            <option value="wp-changelog-manager">WP Changelog Manager PRO</option>
+                            <option value="wp-security-manager">WP Security Manager</option>
+                            <option value="wp-content-optimizer">WP Content Optimizer</option>
+                            <option value="general">Generale / Altro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>📝 Titolo</label>
+                        <input type="text" id="feedbackTitle" placeholder="Breve descrizione del problema/suggerimento">
+                    </div>
+                    <div class="form-group">
+                        <label>📋 Descrizione Dettagliata</label>
+                        <textarea id="feedbackDescription" placeholder="Descrivi nel dettaglio il bug, feedback o suggerimento. Includi passi per riprodurre il problema se è un bug."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>⭐ Priorità</label>
+                        <select id="feedbackPriority">
+                            <option value="low">🟢 Bassa</option>
+                            <option value="medium">🟡 Media</option>
+                            <option value="high">🟠 Alta</option>
+                            <option value="critical">🔴 Critica</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">📤 Invia Segnalazione</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3>📋 Le Tue Segnalazioni</h3>
+                <div id="feedbackList">
+                    <!-- Le segnalazioni verranno caricate dinamicamente -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Downloads Tab -->
+        <div id="downloads" class="tab-content">
+            <div class="card">
+                <h3>📥 File Disponibili per Download</h3>
+                <div id="downloadsList">
+                    <!-- I file verranno caricati dinamicamente -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check authentication
+        function checkAuth() {
+            const user = localStorage.getItem('siteworld_user');
+            if (!user) {
+                window.location.href = 'siteworld-login.html';
+                return null;
+            }
+            
+            const userData = JSON.parse(user);
+            if (userData.role !== 'beta' && userData.role !== 'admin') {
+                alert('❌ Accesso negato! Solo beta testers possono accedere.');
+                window.location.href = 'siteworld-login.html';
+                return null;
+            }
+            
+            return userData;
+        }
+
+        // Initialize
+        const userData = checkAuth();
+        if (userData) {
+            document.getElementById('betaUsername').textContent = userData.username;
+            document.getElementById('topBarUsername').textContent = userData.username;
+            document.getElementById('profileAvatar').textContent = userData.username.charAt(0).toUpperCase();
+        }
+
+        // Top bar profile dropdown
+        function toggleProfileDropdown() {
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('profileDropdown');
+            const profile = document.querySelector('.top-bar-profile');
+            
+            if (!profile.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Tab management
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('siteworld_user');
+            window.location.href = 'siteworld-login.html';
+        }
+
+        // Load data from storage
+        let feedbacks = JSON.parse(localStorage.getItem('siteworld_feedbacks') || '[]');
+        let announcements = JSON.parse(localStorage.getItem('siteworld_announcements') || '[]');
+        let files = JSON.parse(localStorage.getItem('siteworld_files') || '[]');
+
+        // Feedback form handler
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const type = document.getElementById('feedbackType').value;
+            const plugin = document.getElementById('pluginSelect').value;
+            const title = document.getElementById('feedbackTitle').value;
+            const description = document.getElementById('feedbackDescription').value;
+            const priority = document.getElementById('feedbackPriority').value;
+            
+            if (title && description) {
+                const feedback = {
+                    id: Date.now(),
+                    type,
+                    plugin,
+                    title,
+                    description,
+                    priority,
+                    status: 'new',
+                    date: new Date().toLocaleDateString('it-IT'),
+                    time: new Date().toLocaleTimeString('it-IT'),
+                    author: userData.username
+                };
+                
+                feedbacks.unshift(feedback);
+                localStorage.setItem('siteworld_feedbacks', JSON.stringify(feedbacks));
+                
+                this.reset();
+                renderFeedbacks();
+                alert('✅ Segnalazione inviata con successo!');
+            }
+        });
+
+        // Render functions
+        function renderAnnouncements() {
+            const container = document.getElementById('announcementsList');
+            
+            if (announcements.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 2rem;">📭 Nessun annuncio disponibile al momento.</p>';
+                return;
+            }
+            
+            container.innerHTML = announcements.map(announcement => `
+                <div class="announcement ${announcement.type}">
+                    <div class="announcement-header">
+                        <div class="announcement-title">${announcement.title}</div>
+                        <div class="announcement-date">${announcement.date} ${announcement.time}</div>
+                    </div>
+                    <p>${announcement.message}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderFeedbacks() {
+            const container = document.getElementById('feedbackList');
+            const userFeedbacks = feedbacks.filter(f => f.author === userData.username);
+            
+            if (userFeedbacks.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 2rem;">📝 Non hai ancora inviato segnalazioni.</p>';
+                return;
+            }
+            
+            container.innerHTML = userFeedbacks.map(feedback => `
+                <div class="feedback-item ${feedback.status ? 'status-' + feedback.status : 'status-pending'}">
+                    <div class="feedback-header">
+                        <div>
+                            <strong>${feedback.title}</strong>
+                            <span class="feedback-type type-${feedback.type}">${feedback.type.toUpperCase()}</span>
+                            <span class="feedback-status status-${feedback.status || 'pending'}">
+                                ${feedback.status === 'approved' ? '✅ APPROVATA' : 
+                                  feedback.status === 'rejected' ? '❌ RIFIUTATA' : 
+                                  feedback.status === 'in-development' ? '🚧 IN SVILUPPO' : 
+                                  '⏳ IN ATTESA'}
+                            </span>
+                        </div>
+                        <div class="announcement-date">${feedback.date}</div>
+                    </div>
+                    <p style="margin-bottom: 0.5rem;"><strong>Plugin:</strong> ${feedback.plugin} | <strong>Priorità:</strong> ${feedback.priority.toUpperCase()}</p>
+                    <p style="margin-bottom: 1rem;">${feedback.description}</p>
+                    
+                    ${feedback.adminNote ? `
+                        <div class="admin-response">
+                            <h5>📝 Risposta Admin:</h5>
+                            <p>${feedback.adminNote}</p>
+                            <small>Ricevuta il: ${feedback.noteDate}</small>
+                        </div>
+                    ` : ''}
+                    
+                    ${feedback.processedDate ? `
+                        <div class="processed-info">
+                            <small>📅 Processata il: ${feedback.processedDate}</small>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        function renderDownloads() {
+            const container = document.getElementById('downloadsList');
+            
+            if (files.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 2rem;">📦 Nessun file disponibile al momento.</p>';
+                return;
+            }
+            
+            container.innerHTML = files.map(file => `
+                <div class="plugin-card">
+                    <div class="plugin-header">
+                        <div class="plugin-title">${file.name}</div>
+                        <div class="plugin-status status-active">📥 SCARICABILE</div>
+                    </div>
+                    <p>${file.description}</p>
+                    <div style="margin: 1rem 0;">
+                        <strong>File:</strong> ${file.fileName}<br>
+                        <strong>Scade:</strong> ${file.expiration}<br>
+                        <strong>Caricato:</strong> ${file.uploadDate}
+                    </div>
+                    <a href="#" class="download-btn" onclick="downloadFile('${file.fileName}')">
+                        📥 Scarica Plugin
+                    </a>
+                </div>
+            `).join('');
+        }
+
+        function downloadFile(fileName) {
+            alert(`🚀 Download iniziato: ${fileName}\n\n⚠️ Ricorda: questo è un plugin beta con autodistruzione. Non distribuire!`);
+            
+            // Create a dummy zip file for download demo
+            const dummyContent = `Questo è un file demo per ${fileName}\n\nContenuto del plugin beta:\n- File plugin PHP\n- Asset CSS/JS\n- Documentazione\n\n⚠️ IMPORTANTE: Plugin con autodistruzione attiva!\nScadenza: come da dashboard admin\n\n© SITEWORLD Beta Program`;
+            
+            const blob = new Blob([dummyContent], { type: 'application/zip' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            
+            // Update download count
+            let files = JSON.parse(localStorage.getItem('siteworld_files') || '[]');
+            const fileIndex = files.findIndex(f => f.fileName === fileName);
+            if (fileIndex !== -1) {
+                files[fileIndex].downloads = (files[fileIndex].downloads || 0) + 1;
+                localStorage.setItem('siteworld_files', JSON.stringify(files));
+            }
+        }
+
+        // Initial render
+        renderAnnouncements();
+        renderFeedbacks();
+        renderDownloads();
+
+        // Refresh data periodically
+        setInterval(() => {
+            announcements = JSON.parse(localStorage.getItem('siteworld_announcements') || '[]');
+            files = JSON.parse(localStorage.getItem('siteworld_files') || '[]');
+            renderAnnouncements();
+            renderDownloads();
+        }, 30000); // Refresh every 30 seconds
+    </script>
+</body>
+</html>

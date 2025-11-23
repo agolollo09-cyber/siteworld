@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SITEWORLD ID ✨ - Coming Soon</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent-orange: #ff9500;
+            --accent-blue: #06b6d4;
+            --accent-purple: #8b5cf6;
+            --accent-green: #00ff88;
+            --accent-yellow: #ffd700;
+            --border-color: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255, 149, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            animation: backgroundShift 8s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .coming-soon-box {
+            background: linear-gradient(145deg, rgba(17, 17, 17, 0.9), rgba(26, 26, 26, 0.9));
+            border: 2px solid var(--border-color);
+            border-radius: 24px;
+            padding: 4rem;
+            max-width: 600px;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 100px rgba(255, 149, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coming-soon-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-orange), var(--accent-blue), var(--accent-purple));
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .logo-container {
+            margin-bottom: 2rem;
+        }
+
+        .logo-large {
+            width: 200px;
+            height: 80px;
+            filter: drop-shadow(0 0 20px rgba(255, 149, 0, 0.3));
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .main-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--accent-orange), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% { filter: drop-shadow(0 0 10px rgba(255, 149, 0, 0.3)); }
+            100% { filter: drop-shadow(0 0 20px rgba(6, 182, 212, 0.5)); }
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: rgba(17, 17, 17, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent-orange);
+            box-shadow: 0 10px 30px rgba(255, 149, 0, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--accent-orange);
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .timeline {
+            background: rgba(139, 92, 246, 0.1);
+            border: 2px solid var(--accent-purple);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+
+        .timeline-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem;
+            color: var(--accent-purple);
+            margin-bottom: 1rem;
+        }
+
+        .timeline-content {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .cta-section {
+            margin-top: 3rem;
+        }
+
+        .notify-btn {
+            background: linear-gradient(45deg, var(--accent-orange), var(--accent-blue));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            margin: 1rem;
+        }
+
+        .notify-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 149, 0, 0.4);
+        }
+
+        .social-links {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-link {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: rgba(17, 17, 17, 0.8);
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            border-color: var(--accent-orange);
+            background: rgba(255, 149, 0, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(17, 17, 17, 0.8);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.8rem 1.2rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            border-color: var(--accent-orange);
+            box-shadow: 0 0 15px rgba(255, 149, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .coming-soon-box {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            .main-title {
+                font-size: 2rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .back-btn {
+                top: 1rem;
+                left: 1rem;
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Home
+    </a>
+
+    <div class="container">
+        <div class="coming-soon-box">
+            <div class="logo-container">
+                <img src="logo_without_bg.png" alt="SITEWORLD ID" class="logo-large" style="height: 110px; vertical-align: middle; margin-right: 0.5rem;">
+            </div>
+
+            <h1 class="main-title">COMING SOON</h1>
+            <p class="subtitle">
+                Il futuro dell'autenticazione e della gestione community per WordPress è in arrivo!
+            </p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🔐</span>
+                    <h3 class="feature-title">Autenticazione Avanzata</h3>
+                    <p class="feature-description">
+                        Sistema di login unificato con supporto social media e autenticazione a due fattori
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-icon">🧪</span>
+                    <h3 class="feature-title">Beta Program</h3>
+                    <p class="feature-description">
+                        Piattaforma completa per gestire beta tester, feedback e rilasci anticipati
+                    </p>
+                </div>
+
+            <div class="timeline">
+                <h3 class="timeline-title">🗓️ TIMELINE DI SVILUPPO</h3>
+                <div class="timeline-content">
+                    <strong>Q4 2025</strong> - Alpha release e Beta Testing<br>
+                    <strong>Q1 2026</strong> - Launch ufficiale<br>
+                    <strong>Q2 2026</strong> - Raccolta feedback e patch di miglioramento<br>
+                </div>
+            </div>
+
+            <div class="cta-section">
+                <button class="notify-btn" onclick="notifyMe()">
+                    🔔 Notificami al Launch
+                </button>
+                <button class="notify-btn" onclick="joinWaitlist()" style="background: linear-gradient(45deg, var(--accent-purple), var(--accent-green));">
+                    📝 Join Waitlist
+                </button>
+            </div>
+
+            <div class="social-links">
+                <a href="https://discord.gg/P5HRjAwgdZ" target="_blank" class="social-link">
+                    <i class="fab fa-discord"></i>
+                </a>
+                <a href="mailto:sitworldweb@gmail.com" class="social-link">
+                    <i class="fas fa-envelope"></i>
+                </a>
+                <a href="#" class="social-link">
+                    <i class="fab fa-twitter"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function notifyMe() {
+            const email = prompt('✨ Inserisci la tua email per ricevere notifiche sul launch di SITEWORLD ID:');
+            if (email && email.includes('@')) {
+                alert(`🎉 Perfetto! \n\n📧 ${email} è stata aggiunta alla lista notifiche!\n\n🚀 Ti contatteremo appena SITEWORLD ID sarà disponibile!`);
+                
+                // Save email to localStorage for demo
+                let emails = JSON.parse(localStorage.getItem('siteworld_notify_list') || '[]');
+                emails.push({
+                    email: email,
+                    date: new Date().toISOString(),
+                    type: 'notify'
+                });
+                localStorage.setItem('siteworld_notify_list', JSON.stringify(emails));
+            } else if (email) {
+                alert('❌ Email non valida! Riprova con un indirizzo email corretto.');
+            }
+        }
+
+        function joinWaitlist() {
+            const email = prompt('📝 Inserisci la tua email per unirti alla Waitlist VIP:\n\n🎁 Riceverai accesso anticipato e sconti esclusivi!');
+            if (email && email.includes('@')) {
+                alert(`🎊 Benvenuto nella Waitlist VIP!\n\n👑 ${email} ha ora accesso prioritario!\n\n🎁 Riceverai:\n• Early access beta\n• 50% di sconto al launch\n• Badge VIP esclusivo\n• Direct line con il developer`);
+                
+                // Save email to localStorage for demo
+                let emails = JSON.parse(localStorage.getItem('siteworld_notify_list') || '[]');
+                emails.push({
+                    email: email,
+                    date: new Date().toISOString(),
+                    type: 'vip_waitlist'
+                });
+                localStorage.setItem('siteworld_notify_list', JSON.stringify(emails));
+            } else if (email) {
+                alert('❌ Email non valida! Riprova con un indirizzo email corretto.');
+            }
+        }
+
+        // Easter egg for Lorenzo - click logo 5 times
+        let logoClicks = 0;
+        document.querySelector('.logo-large').addEventListener('click', function() {
+            logoClicks++;
+            if (logoClicks >= 5) {
+                const password = prompt('🔐 DEVELOPER ACCESS\n\nPassword:');
+                if (password === 'lorenzo2025' || password === 'swid_dev_access') {
+                    alert('✅ Welcome back, Lorenzo!\n\n🚀 Redirecting to SITEWORLD ID...');
+                    window.location.href = 'siteworld-login.html';
+                } else if (password) {
+                    alert('❌ Access denied.');
+                }
+                logoClicks = 0;
+            }
+        });
+
+        // Reset logo clicks after 5 seconds
+        setInterval(() => {
+            logoClicks = 0;
+        }, 5000);
+    </script>
+</body>
+</html>

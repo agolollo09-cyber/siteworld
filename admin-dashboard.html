@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👑 Admin Dashboard - SITEWORLD ID</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent-cyan: #06b6d4;
+            --accent-purple: #8b5cf6;
+            --accent-green: #00ff88;
+            --accent-red: #ff4444;
+            --accent-yellow: #ffd700;
+            --border-color: #333333;
+            --shadow-glow: rgba(6, 182, 212, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: var(--bg-secondary);
+            padding: 1rem 2rem;
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background: var(--accent-red);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+
+        .tab {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-purple));
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 5px 15px rgba(6, 182, 212, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.3rem;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-purple));
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(6, 182, 212, 0.3);
+        }
+
+        .file-upload {
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .file-upload:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(6, 182, 212, 0.1);
+        }
+
+        .user-list, .announcement-list, .file-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .user-item, .announcement-item, .file-item {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.8rem;
+        }
+
+        .btn-danger {
+            background: var(--accent-red);
+        }
+
+        .btn-success {
+            background: var(--accent-green);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        .warning-box {
+            background: rgba(255, 212, 0, 0.1);
+            border: 2px solid var(--accent-yellow);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .warning-box h4 {
+            color: var(--accent-yellow);
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 0.5rem;
+        }
+
+        .feedback-management-item {
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .feedback-management-item.pending {
+            border-color: var(--accent-yellow);
+            background: rgba(255, 212, 0, 0.05);
+        }
+
+        .feedback-management-item.approved {
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .feedback-management-item.rejected {
+            border-color: var(--accent-red);
+            background: rgba(255, 68, 68, 0.05);
+        }
+
+        .feedback-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .feedback-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .feedback-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background: var(--accent-yellow);
+            color: #000;
+        }
+
+        .status-approved {
+            background: var(--accent-green);
+            color: #000;
+        }
+
+        .status-rejected {
+            background: var(--accent-red);
+            color: white;
+        }
+
+        .feedback-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .feedback-description {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--accent-cyan);
+        }
+
+        .feedback-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .admin-note {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid var(--accent-purple);
+            border-radius: 8px;
+        }
+
+        .note-input {
+            width: 100%;
+            min-height: 80px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            padding: 0.8rem;
+            font-family: 'Inter', sans-serif;
+            resize: vertical;
+        }
+
+        .note-input:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+        }
+
+        .notification-badge {
+            background: var(--accent-red);
+            color: white;
+            border-radius: 50%;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-left: 0.5rem;
+            min-width: 18px;
+            height: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+        }
+
+        .notification-badge.hidden {
+            display: none;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .status-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .status-btn {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .status-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .status-btn.approved {
+            background: var(--accent-green);
+            color: #000;
+        }
+
+        .status-btn.rejected {
+            background: var(--accent-red);
+            color: white;
+        }
+
+        .status-btn.in-development {
+            background: var(--accent-purple);
+            color: white;
+        }
+
+        .status-btn.pending {
+            background: var(--accent-yellow);
+            color: #000;
+        }
+
+        /* Ubisoft-style Top Bar */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.95), rgba(17, 17, 17, 0.95));
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 1000;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .top-bar-logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        .top-bar-center {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .top-bar-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid var(--accent-cyan);
+            transition: all 0.3s ease;
+        }
+
+        .top-bar-profile:hover {
+            background: rgba(6, 182, 212, 0.2);
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+        }
+
+        .profile-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .admin-crown {
+            color: var(--accent-yellow);
+            margin-left: 0.3rem;
+            font-size: 0.8rem;
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            min-width: 200px;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .profile-dropdown.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            color: var(--accent-cyan);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Adjust body padding for top bar */
+        body {
+            padding-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .navbar {
+                padding: 1rem;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .dashboard-title {
+                font-size: 2rem;
+            }
+            
+            .top-bar {
+                padding: 0 1rem;
+            }
+            
+            .top-bar-center {
+                font-size: 0.8rem;
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ubisoft-style Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-logo">
+            <img src="logo_without_bg.png" style="height: 47px; vertical-align: middle; margin-right: 0.5rem;" alt="SITEWORLD ID Logo">
+        </div>
+        <div class="top-bar-center">
+            SITEWORLD ID ✨
+        </div>
+        <div class="top-bar-profile" onclick="toggleProfileDropdown()">
+            <div class="profile-avatar" id="profileAvatar">A</div>
+            <span id="topBarUsername">Admin</span>
+            <span class="admin-crown">👑</span>
+            <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i>
+            <div class="profile-dropdown" id="profileDropdown">
+                <div class="dropdown-item" onclick="window.location.href='admin-dashboard.html'">
+                    👑 Admin Panel
+                </div>
+                <div class="dropdown-item" onclick="window.location.href='beta-dashboard.html'">
+                    🧪 Beta View
+                </div>
+                <div class="dropdown-item" onclick="window.location.href='index.html'">
+                    🏠 Homepage
+                </div>
+                <div class="dropdown-item" onclick="logout()">
+                    🚪 Logout
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-logo">👑 ADMIN DASHBOARD</div>
+        <div class="nav-user">
+            <span id="adminUsername">Admin</span>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Super Admin Control Panel</h1>
+            <p style="color: var(--text-secondary);">Gestisci il Beta Program, annunci e utenti</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">12</div>
+                <div>Beta Testers Attivi</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">5</div>
+                <div>Annunci Pubblicati</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">8</div>
+                <div>Plugin in Test</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">23</div>
+                <div>File Caricati</div>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <div class="tabs">
+                <div class="tab active" onclick="showTab('announcements')">
+                    📢 Gestione Annunci
+                </div>
+                <div class="tab" onclick="showTab('feedbacks')">
+                    🐛 Segnalazioni Beta
+                    <span class="notification-badge" id="feedbackNotificationBadge">0</span>
+                </div>
+                <div class="tab" onclick="showTab('users')">
+                    👥 Utenti Beta
+                </div>
+                <div class="tab" onclick="showTab('files')">
+                    📦 Caricamento File
+                </div>
+                <div class="tab" onclick="showTab('settings')">
+                    ⚙️ Impostazioni
+                </div>
+            </div>
+            
+            <button class="btn" onclick="window.open('license-admin.html', '_blank')" style="background: linear-gradient(45deg, var(--accent-purple), var(--accent-cyan)); white-space: nowrap; padding: 0.8rem 1.5rem;">
+                🔐 License Manager PRO
+            </button>
+        </div>
+
+        <!-- Announcements Tab -->
+        <div id="announcements" class="tab-content active">
+            <div class="card">
+                <h3>📢 Crea Nuovo Annuncio</h3>
+                <form id="announcementForm">
+                    <div class="form-group">
+                        <label>🎯 Titolo Annuncio</label>
+                        <input type="text" id="announcementTitle" placeholder="Es: Nuovo plugin WP Security Manager in beta!">
+                    </div>
+                    <div class="form-group">
+                        <label>📝 Messaggio</label>
+                        <textarea id="announcementMessage" placeholder="Scrivi qui il contenuto dell'annuncio..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>🎨 Tipo Annuncio</label>
+                        <select id="announcementType">
+                            <option value="info">ℹ️ Informazione</option>
+                            <option value="update">🔄 Aggiornamento</option>
+                            <option value="warning">⚠️ Attenzione</option>
+                            <option value="success">✅ Successo</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">🚀 Pubblica Annuncio</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3>📋 Annunci Pubblicati</h3>
+                <div class="announcement-list" id="announcementList">
+                    <!-- Gli annunci verranno aggiunti dinamicamente -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedbacks Tab -->
+        <div id="feedbacks" class="tab-content">
+            <div class="card">
+                <h3>🐛 Segnalazioni da Gestire</h3>
+                <div class="feedback-management" id="feedbackManagement">
+                    <!-- Le segnalazioni verranno caricate dinamicamente -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Tab -->
+        <div id="users" class="tab-content">
+            <div class="card">
+                <h3>👥 Invita Nuovo Beta Tester</h3>
+                <form id="inviteForm">
+                    <div class="form-group">
+                        <label>📧 Email</label>
+                        <input type="email" id="inviteEmail" placeholder="beta.tester@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>👤 Username</label>
+                        <input type="text" id="inviteUsername" placeholder="beta_tester_01">
+                    </div>
+                    <button type="submit" class="btn">📨 Invia Invito</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3>📊 Beta Testers Registrati</h3>
+                <div class="user-list" id="userList">
+                    <!-- Gli utenti verranno aggiunti dinamicamente -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Files Tab -->
+        <div id="files" class="tab-content">
+            <div class="warning-box">
+                <h4>⚠️ N.B. IMPORTANTE</h4>
+                <p>Ricorda di mettere un time di autodistruzione al plugin così che le persone non possano pubblicarlo online.</p>
+            </div>
+
+            <div class="card">
+                <h3>📦 Carica Nuovo File ZIP</h3>
+                <form id="fileUploadForm">
+                    <div class="form-group">
+                        <label>📋 Nome Plugin</label>
+                        <input type="text" id="pluginName" placeholder="Es: WP Security Manager Beta v2.1">
+                    </div>
+                    <div class="form-group">
+                        <label>📝 Descrizione</label>
+                        <textarea id="pluginDescription" placeholder="Descrizione delle novità, bug fix, etc..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>📅 Data Scadenza</label>
+                        <input type="date" id="expirationDate">
+                    </div>
+                    <div class="form-group">
+                        <label>📎 File ZIP</label>
+                        <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                            <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--accent-cyan); margin-bottom: 0.5rem;"></i>
+                            <p>Clicca per selezionare il file ZIP</p>
+                            <input type="file" id="fileInput" accept=".zip" style="display: none;">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">🚀 Carica File</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3>📋 File Caricati</h3>
+                <div class="file-list" id="fileList">
+                    <!-- I file verranno aggiunti dinamicamente -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="settings" class="tab-content">
+            <div class="card">
+                <h3>⚙️ Impostazioni Generali</h3>
+                <div class="form-group">
+                    <label>🔄 Auto-refresh Dashboard (secondi)</label>
+                    <input type="number" value="30" min="10" max="300">
+                </div>
+                <div class="form-group">
+                    <label>📧 Email Notifiche Admin</label>
+                    <input type="email" value="agostafederico@gmail.com">
+                </div>
+                <div class="form-group">
+                    <label>🕒 Durata Default Plugin (giorni)</label>
+                    <input type="number" value="30" min="1" max="90">
+                </div>
+                <button class="btn">💾 Salva Impostazioni</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check authentication
+        function checkAuth() {
+            const user = localStorage.getItem('siteworld_user');
+            if (!user) {
+                window.location.href = 'siteworld-login.html';
+                return null;
+            }
+            
+            const userData = JSON.parse(user);
+            if (userData.role !== 'admin') {
+                alert('❌ Accesso negato! Solo admin possono accedere.');
+                window.location.href = 'siteworld-login.html';
+                return null;
+            }
+            
+            return userData;
+        }
+
+        // Initialize
+        const userData = checkAuth();
+        if (userData) {
+            document.getElementById('adminUsername').textContent = userData.username;
+            document.getElementById('topBarUsername').textContent = userData.username;
+            document.getElementById('profileAvatar').textContent = userData.username.charAt(0).toUpperCase();
+        }
+
+        // Top bar profile dropdown
+        function toggleProfileDropdown() {
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('profileDropdown');
+            const profile = document.querySelector('.top-bar-profile');
+            
+            if (!profile.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Tab management
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Mark feedbacks as viewed if feedbacks tab is opened
+            if (tabName === 'feedbacks') {
+                markFeedbacksAsViewed();
+            }
+        }
+        
+        function markFeedbacksAsViewed() {
+            let feedbacks = JSON.parse(localStorage.getItem('siteworld_feedbacks') || '[]');
+            let updated = false;
+            
+            feedbacks.forEach(feedback => {
+                if (!feedback.viewed) {
+                    feedback.viewed = true;
+                    updated = true;
+                }
+            });
+            
+            if (updated) {
+                localStorage.setItem('siteworld_feedbacks', JSON.stringify(feedbacks));
+                updateNotificationBadge();
+            }
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('siteworld_user');
+            window.location.href = 'siteworld-login.html';
+        }
+
+        // Mock data storage
+        let announcements = JSON.parse(localStorage.getItem('siteworld_announcements') || '[]');
+        let betaUsers = JSON.parse(localStorage.getItem('siteworld_beta_users') || '[]');
+        let uploadedFiles = JSON.parse(localStorage.getItem('siteworld_files') || '[]');
+
+        // Form handlers
+        document.getElementById('announcementForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('announcementTitle').value;
+            const message = document.getElementById('announcementMessage').value;
+            const type = document.getElementById('announcementType').value;
+            
+            if (title && message) {
+                const announcement = {
+                    id: Date.now(),
+                    title,
+                    message,
+                    type,
+                    date: new Date().toLocaleDateString('it-IT'),
+                    time: new Date().toLocaleTimeString('it-IT')
+                };
+                
+                announcements.unshift(announcement);
+                localStorage.setItem('siteworld_announcements', JSON.stringify(announcements));
+                
+                this.reset();
+                renderAnnouncements();
+                alert('✅ Annuncio pubblicato con successo!');
+            }
+        });
+
+        document.getElementById('inviteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('inviteEmail').value;
+            const username = document.getElementById('inviteUsername').value;
+            
+            if (email && username) {
+                const user = {
+                    id: Date.now(),
+                    email,
+                    username,
+                    status: 'invited',
+                    joinDate: new Date().toLocaleDateString('it-IT')
+                };
+                
+                betaUsers.unshift(user);
+                localStorage.setItem('siteworld_beta_users', JSON.stringify(betaUsers));
+                
+                this.reset();
+                renderUsers();
+                alert('✅ Invito inviato con successo!');
+            }
+        });
+
+        document.getElementById('fileUploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('pluginName').value;
+            const description = document.getElementById('pluginDescription').value;
+            const expiration = document.getElementById('expirationDate').value;
+            const fileInput = document.getElementById('fileInput');
+            
+            if (name && description && expiration && fileInput.files[0]) {
+                const file = {
+                    id: Date.now(),
+                    name,
+                    description,
+                    expiration,
+                    fileName: fileInput.files[0].name,
+                    uploadDate: new Date().toLocaleDateString('it-IT'),
+                    downloads: 0
+                };
+                
+                uploadedFiles.unshift(file);
+                localStorage.setItem('siteworld_files', JSON.stringify(uploadedFiles));
+                
+                this.reset();
+                renderFiles();
+                alert('✅ File caricato con successo!');
+            }
+        });
+
+        // Render functions
+        function renderAnnouncements() {
+            const container = document.getElementById('announcementList');
+            container.innerHTML = announcements.map(announcement => `
+                <div class="announcement-item">
+                    <div>
+                        <strong>${announcement.title}</strong><br>
+                        <small style="color: var(--text-secondary);">${announcement.date} ${announcement.time}</small>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-small btn-danger" onclick="deleteAnnouncement(${announcement.id})">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderUsers() {
+            const container = document.getElementById('userList');
+            container.innerHTML = betaUsers.map(user => `
+                <div class="user-item">
+                    <div>
+                        <strong>${user.username}</strong> (${user.email})<br>
+                        <small style="color: var(--text-secondary);">Registrato: ${user.joinDate}</small>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-small btn-danger" onclick="removeUser(${user.id})">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderFiles() {
+            const container = document.getElementById('fileList');
+            container.innerHTML = uploadedFiles.map(file => `
+                <div class="file-item">
+                    <div>
+                        <strong>${file.name}</strong> (${file.fileName})<br>
+                        <small style="color: var(--text-secondary);">Scade: ${file.expiration} | Downloads: ${file.downloads}</small>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-small btn-danger" onclick="deleteFile(${file.id})">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Delete functions
+        function deleteAnnouncement(id) {
+            if (confirm('Eliminare questo annuncio?')) {
+                announcements = announcements.filter(a => a.id !== id);
+                localStorage.setItem('siteworld_announcements', JSON.stringify(announcements));
+                renderAnnouncements();
+            }
+        }
+
+        function removeUser(id) {
+            if (confirm('Rimuovere questo utente dal beta program?')) {
+                betaUsers = betaUsers.filter(u => u.id !== id);
+                localStorage.setItem('siteworld_beta_users', JSON.stringify(betaUsers));
+                renderUsers();
+            }
+        }
+
+        function deleteFile(id) {
+            if (confirm('Eliminare questo file?')) {
+                uploadedFiles = uploadedFiles.filter(f => f.id !== id);
+                localStorage.setItem('siteworld_files', JSON.stringify(uploadedFiles));
+                renderFiles();
+            }
+        }
+
+        // File input handler
+        document.getElementById('fileInput').addEventListener('change', function() {
+            const fileName = this.files[0]?.name || 'Nessun file selezionato';
+            const uploadDiv = document.querySelector('.file-upload p');
+            uploadDiv.textContent = `File selezionato: ${fileName}`;
+        });
+
+        // Set default expiration date (30 days from now)
+        const defaultDate = new Date();
+        defaultDate.setDate(defaultDate.getDate() + 30);
+        document.getElementById('expirationDate').value = defaultDate.toISOString().split('T')[0];
+
+        // Initial render
+        renderAnnouncements();
+        renderUsers();
+        renderFiles();
+        renderFeedbacks();
+        updateNotificationBadge();
+        
+        // Update notifications every 30 seconds
+        setInterval(() => {
+            updateNotificationBadge();
+        }, 30000);
+
+        // Feedback management functions
+        function renderFeedbacks() {
+            const feedbacks = JSON.parse(localStorage.getItem('siteworld_feedbacks') || '[]');
+            const container = document.getElementById('feedbackManagement');
+            
+            if (feedbacks.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 2rem;">📭 Nessuna segnalazione ricevuta.</p>';
+                return;
+            }
+            
+            container.innerHTML = feedbacks.map(feedback => `
+                <div class="feedback-management-item ${feedback.status || 'pending'}">
+                    <div class="feedback-header">
+                        <div class="feedback-title">${feedback.title}</div>
+                        <div class="feedback-status status-${feedback.status || 'pending'}">
+                            ${feedback.status === 'approved' ? '✅ Approvata' : feedback.status === 'rejected' ? '❌ Rifiutata' : '⏳ In Attesa'}
+                        </div>
+                    </div>
+                    
+                    <div class="feedback-meta">
+                        <div><strong>👤 Utente:</strong> ${feedback.author}</div>
+                        <div><strong>📅 Data:</strong> ${feedback.date}</div>
+                        <div><strong>🔌 Plugin:</strong> ${feedback.plugin}</div>
+                        <div><strong>📝 Tipo:</strong> ${feedback.type.toUpperCase()}</div>
+                        <div><strong>⚡ Priorità:</strong> ${feedback.priority.toUpperCase()}</div>
+                    </div>
+                    
+                    <div class="feedback-description">
+                        <p>${feedback.description}</p>
+                    </div>
+                    
+                    <div class="status-buttons">
+                        <button class="status-btn approved ${feedback.status === 'approved' ? 'active' : ''}" onclick="updateFeedbackStatus(${feedback.id}, 'approved')">
+                            ✅ Approvata
+                        </button>
+                        <button class="status-btn rejected ${feedback.status === 'rejected' ? 'active' : ''}" onclick="updateFeedbackStatus(${feedback.id}, 'rejected')">
+                            ❌ Rifiutata
+                        </button>
+                        <button class="status-btn in-development ${feedback.status === 'in-development' ? 'active' : ''}" onclick="updateFeedbackStatus(${feedback.id}, 'in-development')">
+                            🚧 In Sviluppo
+                        </button>
+                        <button class="status-btn pending ${(!feedback.status || feedback.status === 'pending') ? 'active' : ''}" onclick="updateFeedbackStatus(${feedback.id}, 'pending')">
+                            ⏳ In Attesa
+                        </button>
+                    </div>
+                    
+                    <div class="feedback-actions">
+                        <textarea class="note-input" id="note-${feedback.id}" placeholder="Scrivi una nota per il beta tester (opzionale)..."></textarea>
+                        <button class="btn btn-small" onclick="sendNote(${feedback.id})" style="background: var(--accent-purple);">
+                            📝 Invia Nota
+                        </button>
+                    </div>
+                    
+                    ${feedback.adminNote ? `
+                        <div class="admin-note">
+                            <h5 style="color: var(--accent-purple); margin-bottom: 0.5rem;">📝 Nota Admin:</h5>
+                            <p>${feedback.adminNote}</p>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+        
+
+        
+        function sendNote(id) {
+            const noteText = document.getElementById(`note-${id}`).value.trim();
+            if (!noteText) {
+                alert('⚠️ Scrivi una nota prima di inviarla!');
+                return;
+            }
+            
+            if (confirm('Inviare questa nota al beta tester?')) {
+                updateFeedbackNote(id, noteText);
+            }
+        }
+        
+        function updateFeedbackStatus(id, status) {
+            let feedbacks = JSON.parse(localStorage.getItem('siteworld_feedbacks') || '[]');
+            const feedbackIndex = feedbacks.findIndex(f => f.id === id);
+            
+            if (feedbackIndex !== -1) {
+                feedbacks[feedbackIndex].status = status;
+                feedbacks[feedbackIndex].processedDate = new Date().toLocaleDateString('it-IT');
+                localStorage.setItem('siteworld_feedbacks', JSON.stringify(feedbacks));
+                renderFeedbacks();
+                updateNotificationBadge();
+                
+                const statusTexts = {
+                    'approved': '✅ approvata',
+                    'rejected': '❌ rifiutata', 
+                    'in-development': '🚧 messa in sviluppo',
+                    'pending': '⏳ rimessa in attesa'
+                };
+                
+                alert(`${statusTexts[status]} Segnalazione ${statusTexts[status]} con successo!`);
+            }
+        }
+        
+        function updateFeedbackNote(id, note) {
+            let feedbacks = JSON.parse(localStorage.getItem('siteworld_feedbacks') || '[]');
+            const feedbackIndex = feedbacks.findIndex(f => f.id === id);
+            
+            if (feedbackIndex !== -1) {
+                feedbacks[feedbackIndex].adminNote = note;
+                feedbacks[feedbackIndex].noteDate = new Date().toLocaleDateString('it-IT');
+                localStorage.setItem('siteworld_feedbacks', JSON.stringify(feedbacks));
+                renderFeedbacks();
+                alert('📝 Nota inviata con successo!');
+                updateNotificationBadge();
+            }
+        }
+        
+        // Notification badge management
+        function updateNotificationBadge() {
+            const feedbacks = JSON.parse(localStorage.getItem('siteworld_feedbacks') || '[]');
+            const unreadCount = feedbacks.filter(f => !f.viewed).length;
+            const badge = document.getElementById('feedbackNotificationBadge');
+            
+            if (badge) {
+                badge.textContent = unreadCount;
+                badge.classList.toggle('hidden', unreadCount === 0);
+            }
+        }
+        
+        // Mark feedbacks as viewed when tab is opened
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Mark feedbacks as viewed if feedbacks tab is opened
+            if (tabName === 'feedbacks') {
+                markFeedbacksAsViewed();
+            }
+        }
+        
+        function markFeedbacksAsViewed() {
+            let feedbacks = JSON.parse(localStorage.getItem('siteworld_feedbacks') || '[]');
+            let updated = false;
+            
+            feedbacks.forEach(feedback => {
+                if (!feedback.viewed) {
+                    feedback.viewed = true;
+                    updated = true;
+                }
+            });
+            
+            if (updated) {
+                localStorage.setItem('siteworld_feedbacks', JSON.stringify(feedbacks));
+                updateNotificationBadge();
+            }
+        }
+    </script>
+</body>
+</html>

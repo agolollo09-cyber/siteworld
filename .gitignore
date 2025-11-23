@@ -1,0 +1,44 @@
+# Ignora file temporanei e log
+*.log
+*.tmp
+temp/
+logs/
+
+# Ignora file di sistema
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Ignora file IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Ignora file Node.js (se mai servissero)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Ignora database temporanei
+api/licenses_database.json
+api/rate_limit.txt
+api/verification_log.txt
+api/sync_log.txt
+
+# Ignora credenziali sensibili (se mai aggiunte)
+config.local.php
+.env
+secrets.txt
+
+# Ignora file di backup
+*.bak
+*.backup
+backup/
+
+# Mantieni le cartelle API ma ignora i file temporanei dentro
+api/*.json
+api/*.txt
+!api/verify-license.php
+!api/sync-licenses.php

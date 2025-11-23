@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SITEWORLD ID ✨ - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent-cyan: #06b6d4;
+            --accent-purple: #8b5cf6;
+            --accent-green: #00ff88;
+            --accent-red: #ff4444;
+            --accent-yellow: #ffd700;
+            --border-color: #333333;
+            --shadow-glow: rgba(6, 182, 212, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Cyber Grid Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(6, 182, 212, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6, 182, 212, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Floating Particles */
+        .particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .login-box {
+            background: linear-gradient(145deg, rgba(17, 17, 17, 0.9), rgba(26, 26, 26, 0.9));
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 450px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 50px var(--shadow-glow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple), var(--accent-green));
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo h1 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-purple));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(6, 182, 212, 0.3);
+        }
+
+        .register-link {
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .register-link a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .register-link a:hover {
+            color: var(--accent-green);
+            text-shadow: 0 0 10px var(--accent-green);
+        }
+
+        .features {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .feature-item i {
+            color: var(--accent-green);
+            margin-right: 0.5rem;
+            width: 20px;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(17, 17, 17, 0.8);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.8rem 1.2rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Ubisoft-style Top Bar */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.95), rgba(17, 17, 17, 0.95));
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 1000;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .top-bar-logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        .top-bar-center {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .top-bar-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .top-bar-btn {
+            padding: 0.3rem 0.8rem;
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid var(--accent-cyan);
+            border-radius: 15px;
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .top-bar-btn:hover {
+            background: rgba(6, 182, 212, 0.2);
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+        }
+
+        /* Adjust body padding for top bar */
+        body {
+            padding-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 1rem;
+            }
+            
+            .login-box {
+                padding: 2rem;
+            }
+            
+            .logo h1 {
+                font-size: 2rem;
+            }
+            
+            .back-btn {
+                top: 60px;
+                left: 1rem;
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .top-bar {
+                padding: 0 1rem;
+            }
+            
+            .top-bar-center {
+                font-size: 0.8rem;
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ubisoft-style Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-logo">
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8IS0tIFNXIGxldHRlcnMgd2l0aCBncmFkaWVudCAtLT4KPHN0eWxlPgoudGV4dC1ncmFkaWVudCB7CiAgZm9udC1mYW1pbHk6ICdKZXRCcmFpbnMgTW9ubycsIG1vbm9zcGFjZTsKICBmb250LXdlaWdodDogNzAwOwogIGZvbnQtc2l6ZTogMjRweDsKICBmaWxsOiB1cmwoI2dyYWRpZW50KTsKfQoudGV4dCB7CiAgZmlsbDogdXJsKCNncmFkaWVudCk7Cn0KLmlkLWJveCB7CiAgZmlsbDogd2hpdGU7CiAgc3Ryb2tlOiBub25lOwp9Ci5pZC10ZXh0IHsKICBmb250LWZhbWlseTogJ0pldEJyYWlucyBNb25vJywgbW9ub3NwYWNlOwogIGZvbnQtd2VpZ2h0OiA3MDA7CiAgZm9udC1zaXplOiAxNHB4OwogIGZpbGw6IGJsYWNrOwp9Cjwvc3R5bGU+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImdyYWRpZW50IiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIwJSI+CjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNmZjk1MDA7c3RvcC1vcGFjaXR5OjEiIC8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6IzA2YjZkNDtzdG9wLW9wYWNpdHk6MSIgLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8dGV4dCB4PSI1IiB5PSIyOCIgY2xhc3M9InRleHQtZ3JhZGllbnQiPlNXPC90ZXh0Pgo8cmVjdCB4PSI1NSIgeT0iOCIgd2lkdGg9IjM1IiBoZWlnaHQ9IjI0IiByeD0iOCIgY2xhc3M9ImlkLWJveCIvPgo8dGV4dCB4PSI2MSIgeT0iMjUiIGNsYXNzPSJpZC10ZXh0Ij5JRDwvdGV4dD4KPC9zdmc+" alt="SITEWORLD ID" style="height: 24px; filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.3));">
+        </div>
+        <div class="top-bar-center">
+            SITEWORLD ID ✨
+        </div>
+        <div class="top-bar-actions">
+            <a href="siteworld-register.html" class="top-bar-btn">
+                ✨ Registrati
+            </a>
+            <a href="index.html" class="top-bar-btn">
+                🏠 Home
+            </a>
+        </div>
+    </div>
+
+    <a href="index.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Home
+    </a>
+
+    <div class="login-container">
+        <div class="login-box">
+            <div class="logo">
+                <h1>SITEWORLD ID ✨</h1>
+                <p>Accedi al Beta Program</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">👤 Username</label>
+                    <input type="text" id="username" name="username" required placeholder="Il tuo username">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">🔒 Password</label>
+                    <input type="password" id="password" name="password" required placeholder="La tua password">
+                </div>
+
+                <button type="submit" class="login-btn">
+                    🚀 Accedi al Beta Program
+                </button>
+            </form>
+
+            <div class="register-link">
+                <p>Non hai un account? <a href="siteworld-register.html">Registrati qui</a></p>
+            </div>
+
+            <div class="features">
+                <h3 style="color: var(--accent-cyan); margin-bottom: 1rem; font-family: 'JetBrains Mono', monospace;">🎯 Cosa Ottieni:</h3>
+                <div class="feature-item">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>Annunci esclusivi e aggiornamenti</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-download"></i>
+                    <span>Accesso anticipato ai plugin</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-bug"></i>
+                    <span>Sistema di segnalazione bug</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-star"></i>
+                    <span>Feedback diretto con il developer</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.animationDuration = Math.random() * 3 + 2 + 's';
+            particle.style.opacity = Math.random();
+            document.body.appendChild(particle);
+
+            setTimeout(() => {
+                particle.remove();
+            }, 5000);
+        }
+
+        // Create particles periodically
+        setInterval(createParticle, 300);
+
+        // Add CSS for particle animation
+        const style = document.createElement('style');
+        style.textContent = `
+            .particle {
+                animation: float linear infinite;
+            }
+            @keyframes float {
+                to {
+                    transform: translateY(-100vh) rotate(360deg);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Login form handling
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Demo credentials (in real implementation, this would be server-side)
+            if (username === 'admin' && password === 'admin123') {
+                localStorage.setItem('siteworld_user', JSON.stringify({
+                    username: username,
+                    role: 'admin',
+                    loginTime: new Date().toISOString()
+                }));
+                window.location.href = 'admin-dashboard.html';
+            } else if (username === 'betatester' && password === 'beta123') {
+                localStorage.setItem('siteworld_user', JSON.stringify({
+                    username: username,
+                    role: 'beta',
+                    loginTime: new Date().toISOString()
+                }));
+                window.location.href = 'beta-dashboard.html';
+            } else {
+                alert('❌ Credenziali non valide! \n\nDemo:\n👑 Admin: admin / admin123\n🧪 Beta Tester: betatester / beta123');
+            }
+        });
+
+        // Check if already logged in
+        const user = localStorage.getItem('siteworld_user');
+        if (user) {
+            const userData = JSON.parse(user);
+            if (userData.role === 'admin') {
+                window.location.href = 'admin-dashboard.html';
+            } else if (userData.role === 'beta') {
+                window.location.href = 'beta-dashboard.html';
+            }
+        }
+    </script>
+</body>
+</html>

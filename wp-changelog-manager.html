@@ -1,0 +1,742 @@
+﻿<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WP Changelog Manager Pro - Ultra Modern System</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Inter:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-card: rgba(18, 18, 18, 0.8);
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --accent-neon: #00ff88;
+            --accent-purple: #8b5cf6;
+            --accent-blue: #06b6d4;
+            --accent-red: #ef4444;
+            --border-glow: rgba(0, 255, 136, 0.3);
+            --shadow-neon: 0 0 20px rgba(0, 255, 136, 0.1);
+        }
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: var(--bg-primary);
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(0, 255, 136, 0.1) 0%, transparent 50%);
+            color: var(--text-primary); 
+            margin: 0; 
+            padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 0 2rem;
+        }
+        
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .glass-ultra { 
+            background: var(--bg-card);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px; 
+            padding: 2.5rem; 
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+        
+        .glass-ultra::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-neon), transparent);
+            opacity: 0.5;
+        }
+        
+        .neon-text { 
+            background: linear-gradient(45deg, var(--accent-neon), var(--accent-blue), var(--accent-purple)); 
+            background-size: 300% 300%; 
+            -webkit-background-clip: text; 
+            background-clip: text;
+            -webkit-text-fill-color: transparent; 
+            animation: neonFlow 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.3));
+        }
+        
+        @keyframes neonFlow { 
+            0%, 100% { background-position: 0% 50%; } 
+            50% { background-position: 100% 50%; } 
+        }
+        
+        .hero-title { 
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+            text-align: center;
+            margin: 3rem 0; 
+            text-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+        }
+        
+        .features-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+            gap: 1.5rem; 
+            margin: 2rem 0;
+        }
+        
+        .feature-card { 
+            background: rgba(18, 18, 18, 0.6); 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem; 
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--accent-neon), var(--accent-purple));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 16px;
+            z-index: -1;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--border-glow);
+            box-shadow: var(--shadow-neon);
+        }
+        
+        .feature-card:hover::before {
+            opacity: 0.1;
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-neon);
+        }
+        
+        .cyber-btn {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--accent-neon);
+            color: var(--accent-neon);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            display: inline-block;
+            margin: 1rem 0.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cyber-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .cyber-btn:hover {
+            background: rgba(0, 255, 136, 0.2);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .cyber-btn:hover::before {
+            left: 100%;
+        }
+        
+        .cyber-btn-primary {
+            background: linear-gradient(45deg, var(--accent-neon), var(--accent-blue));
+            border: none;
+            color: var(--bg-primary);
+            font-weight: 700;
+        }
+        
+        .cyber-btn-primary:hover {
+            background: linear-gradient(45deg, var(--accent-blue), var(--accent-neon));
+            color: var(--bg-primary);
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.4);
+        }
+        
+        .back-link { 
+            color: var(--accent-neon); 
+            text-decoration: none; 
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover { 
+            text-shadow: 0 0 10px var(--accent-neon);
+            color: white;
+        }
+        
+        .tech-tag {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin: 0.2rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .tag-php { background: rgba(139, 92, 246, 0.2); color: var(--accent-purple); }
+        .tag-js { background: rgba(6, 182, 212, 0.2); color: var(--accent-blue); }
+        .tag-wp { background: rgba(0, 255, 136, 0.2); color: var(--accent-neon); }
+        
+        @keyframes scroll-gallery {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-400px * 2)); }
+        }
+        
+        .screenshot-gallery:hover .gallery-container {
+            animation-play-state: paused;
+        }
+        
+        .screenshot-item:hover {
+            transform: scale(1.02);
+            border-color: var(--border-glow);
+            box-shadow: var(--shadow-neon);
+        }
+        
+        .cyber-btn-wp {
+            background: linear-gradient(45deg, #21759b, #135e96);
+            border: 1px solid #21759b;
+            color: white;
+        }
+        
+        .cyber-btn-wp:hover {
+            background: linear-gradient(45deg, #135e96, #21759b);
+            box-shadow: 0 0 20px rgba(33, 117, 155, 0.4);
+        }
+        
+        .discord-btn {
+            background: linear-gradient(45deg, #5865f2, #4752c4);
+            border: 1px solid #5865f2;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            display: inline-block;
+            margin: 1rem 0.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .discord-btn:hover {
+            background: linear-gradient(45deg, #4752c4, #5865f2);
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .paypal-container {
+            background: linear-gradient(135deg, rgba(0, 48, 135, 0.1), rgba(0, 112, 224, 0.1));
+            border: 2px solid #0070e0;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .paypal-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #0070e0, transparent);
+            opacity: 0.8;
+        }
+        
+        .price-badge {
+            background: linear-gradient(45deg, #ffd700, #ffed4a);
+            color: #000;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            animation: pulse 2s infinite;
+        }
+        
+        .paypal-benefits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+        
+        .paypal-btn {
+            background: #0070e0;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            margin: 0.5rem;
+        }
+        
+        .paypal-btn:hover {
+            background: #005bb5;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 112, 224, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 0 1rem; }
+            .features-grid { grid-template-columns: 1fr; }
+            .back-link { position: static; margin-bottom: 2rem; display: inline-block; }
+            .gallery-container { animation: scroll-gallery 30s linear infinite; }
+            .paypal-benefits { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cyber Grid Background -->
+    <div class="cyber-grid"></div>
+    
+    <!-- Back Navigation -->
+    <a href="index.html" class="back-link">&lt; RETURN_TO_PORTFOLIO</a>
+    
+    <div class="container">
+        
+        <!-- Hero Section -->
+        <section style="padding: 4rem 0 2rem;">
+            <h1 class="hero-title">
+                <span class="neon-text">WP CHANGELOG</span><br>
+                <span class="neon-text">MANAGER PRO</span>
+            </h1>
+            
+            <div class="glass-ultra">
+                <h2 style="font-family: 'JetBrains Mono', monospace; color: var(--accent-neon); margin-bottom: 1.5rem;">
+                    &gt; WP_CHANGLOG_MANAGER_PRO.exe
+                </h2>
+                <p style="font-size: 1.2rem; line-height: 1.7; color: var(--text-secondary);">
+                    Rivoluziona la gestione dei changelog WordPress con questo plugin di nuova generazione. 
+                    Architettato per sviluppatori, agenzie e aziende che esigono <span style="color: var(--accent-neon);">precisione</span>, 
+                    <span style="color: var(--accent-purple);">performance</span> e <span style="color: var(--accent-blue);">professionalità</span>.
+                </p>
+            </div>
+        </section>
+        
+        <!-- Features Section -->
+        <section style="padding: 2rem 0;">
+            <div class="glass-ultra">
+                <h3 style="font-family: 'JetBrains Mono', monospace; color: var(--accent-neon); margin-bottom: 2rem; font-size: 1.8rem;">
+                    ⚡ FUNZIONALITÀ_CORE
+                </h3>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎨</div>
+                        <h4 style="color: var(--text-primary); margin-bottom: 0.8rem; font-family: 'JetBrains Mono', monospace;">Template Engine</h4>
+                        <p style="color: var(--text-secondary); line-height: 1.6;">
+                            Sistema di template avanzato con editor visuale drag-and-drop. 
+                            Personalizzazione completa del layout e styling.
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">📱</div>
+                        <h4 style="color: var(--text-primary); margin-bottom: 0.8rem; font-family: 'JetBrains Mono', monospace;">Responsive Design</h4>
+                        <p style="color: var(--text-secondary); line-height: 1.6;">
+                            Interfaccia fluid-responsive ottimizzata per ogni dispositivo. 
+                            UX perfetta su desktop, tablet e mobile.
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🔗</div>
+                        <h4 style="color: var(--text-primary); margin-bottom: 0.8rem; font-family: 'JetBrains Mono', monospace;">Deep Integration</h4>
+                        <p style="color: var(--text-secondary); line-height: 1.6;">
+                            Integrazione nativa con WordPress Core. 
+                            Compatibilità universale con temi e plugin.
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h4 style="color: var(--text-primary); margin-bottom: 0.8rem; font-family: 'JetBrains Mono', monospace;">Performance Boost</h4>
+                        <p style="color: var(--text-secondary); line-height: 1.6;">
+                            Architettura ottimizzata per zero-latency. 
+                            Caching intelligente e lazy-loading avanzato.
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h4 style="color: var(--text-primary); margin-bottom: 0.8rem; font-family: 'JetBrains Mono', monospace;">Analytics Suite</h4>
+                        <p style="color: var(--text-secondary); line-height: 1.6;">
+                            Dashboard analytics real-time. Monitoraggio engagement, 
+                            metriche di performance e user behaviour.
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🛡️</div>
+                        <h4 style="color: var(--text-primary); margin-bottom: 0.8rem; font-family: 'JetBrains Mono', monospace;">Security Layer</h4>
+                        <p style="color: var(--text-secondary); line-height: 1.6;">
+                            Sistema di sicurezza multi-livello. Protezione anti-spam, 
+                            controllo accessi e audit logging completo.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Screenshot Gallery -->
+        <section style="padding: 2rem 0;">
+            <div class="glass-ultra">
+                <h3 style="font-family: 'JetBrains Mono', monospace; color: var(--accent-purple); margin-bottom: 2rem; font-size: 1.8rem;">
+                    📸 INTERFACE_PREVIEW
+                </h3>
+                
+                <div class="screenshot-gallery" style="overflow-x: auto; padding: 1rem 0;">
+                    <div class="gallery-container" style="display: flex; gap: 1.5rem; min-width: max-content; animation: scroll-gallery 20s linear infinite;">
+                        <!-- Real Screenshots -->
+                        <div class="screenshot-item" style="min-width: 600px; height: 350px; background: var(--bg-card); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; position: relative; overflow: hidden;">
+                            <img src="Dashboard_Overview.png" alt="Dashboard Overview" style="width: 100%; height: 100%; object-fit: cover; border-radius: 16px;">
+                            <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); padding: 1rem; color: white; font-family: 'JetBrains Mono', monospace;">
+                                <div style="font-weight: 600;">Dashboard Overview</div>
+                                <div style="font-size: 0.8rem; opacity: 0.7;">Main Interface</div>
+                            </div>
+                        </div>
+                        
+                        <div class="screenshot-item" style="min-width: 600px; height: 350px; background: var(--bg-card); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; position: relative; overflow: hidden;">
+                            <img src="Settings_Panel.png" alt="Settings Panel" style="width: 100%; height: 100%; object-fit: cover; border-radius: 16px;">
+                            <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); padding: 1rem; color: white; font-family: 'JetBrains Mono', monospace;">
+                                <div style="font-weight: 600;">Settings Panel</div>
+                                <div style="font-size: 0.8rem; opacity: 0.7;">Configuration</div>
+                            </div>
+                        </div>
+                        
+                        <div class="screenshot-item" style="min-width: 600px; height: 350px; background: var(--bg-card); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; position: relative; overflow: hidden;">
+                            <img src="Analytics_Dashboard.png" alt="Analytics Dashboard" style="width: 100%; height: 100%; object-fit: cover; border-radius: 16px;">
+                            <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); padding: 1rem; color: white; font-family: 'JetBrains Mono', monospace;">
+                                <div style="font-weight: 600;">Analytics Dashboard</div>
+                                <div style="font-size: 0.8rem; opacity: 0.7;">Performance Metrics</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Business Benefits -->
+        <section style="padding: 2rem 0;">
+            <div class="glass-ultra">
+                <h3 style="font-family: 'JetBrains Mono', monospace; color: var(--accent-blue); margin-bottom: 2rem; font-size: 1.8rem;">
+                    🚀 BUSINESS_ACCELERATION
+                </h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <div style="background: rgba(0, 255, 136, 0.05); padding: 1.5rem; border-radius: 12px; border-left: 3px solid var(--accent-neon);">
+                        <h4 style="color: var(--accent-neon); margin-bottom: 0.8rem;">Comunicazione Trasparente</h4>
+                        <p style="color: var(--text-secondary);">Mantieni stakeholders e utenti sempre aggiornati con comunicazione real-time</p>
+                    </div>
+                    
+                    <div style="background: rgba(139, 92, 246, 0.05); padding: 1.5rem; border-radius: 12px; border-left: 3px solid var(--accent-purple);">
+                        <h4 style="color: var(--accent-purple); margin-bottom: 0.8rem;">Credibilità Enterprise</h4>
+                        <p style="color: var(--text-secondary);">Dimostra professionalità e continuous improvement del tuo prodotto</p>
+                    </div>
+                    
+                    <div style="background: rgba(6, 182, 212, 0.05); padding: 1.5rem; border-radius: 12px; border-left: 3px solid var(--accent-blue);">
+                        <h4 style="color: var(--accent-blue); margin-bottom: 0.8rem;">Engagement Optimization</h4>
+                        <p style="color: var(--text-secondary);">Incrementa interazione e retention della community attraverso changelog coinvolgenti</p>
+                    </div>
+                    
+                    <div style="background: rgba(239, 68, 68, 0.05); padding: 1.5rem; border-radius: 12px; border-left: 3px solid var(--accent-red);">
+                        <h4 style="color: var(--accent-red); margin-bottom: 0.8rem;">SEO Performance</h4>
+                        <p style="color: var(--text-secondary);">Structured data e contenuti ottimizzati per massima visibilità sui motori di ricerca</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Pro Version CTA -->
+        <section style="padding: 2rem 0;">
+            <div class="glass-ultra" style="text-align: center;">
+                <h3 style="font-family: 'JetBrains Mono', monospace; color: var(--accent-purple); margin-bottom: 1.5rem; font-size: 1.8rem;">
+                    🚀 FUNZIONALITÀ_PRO_BLOCCATA
+                </h3>
+                
+                <p style="font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 2rem; line-height: 1.6;">
+                    <span style="color: #ffd700;">Comparazione Versioni</span><br>
+                    Confronta facilmente le diverse versioni del tuo changelog per una migliore analisi e documentazione
+                </p>
+                
+                <div style="background: rgba(139, 92, 246, 0.1); border: 2px solid var(--accent-purple); border-radius: 20px; padding: 2rem; margin: 2rem 0; text-align: left;">
+                    <h4 style="color: var(--accent-purple); margin-bottom: 1.5rem; font-family: 'JetBrains Mono', monospace;">
+                        🔓 Sblocca tutte le funzionalità PRO:
+                    </h4>
+                    
+                    <div style="display: grid; gap: 1rem; font-family: 'Inter', sans-serif;">
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 0.8rem; background: rgba(255, 255, 255, 0.05); border-radius: 12px;">
+                            <span style="color: #ffd700; font-size: 1.2rem;">🤖</span>
+                            <div>
+                                <strong style="color: var(--text-primary);">AI Helper</strong> - Assistente intelligente per la gestione changelog
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 0.8rem; background: rgba(255, 255, 255, 0.05); border-radius: 12px;">
+                            <span style="color: #4ecdc4; font-size: 1.2rem;">🗺️</span>
+                            <div>
+                                <strong style="color: var(--text-primary);">Roadmap Interattiva</strong> - Pianifica e visualizza il futuro del tuo progetto
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 0.8rem; background: rgba(255, 255, 255, 0.05); border-radius: 12px;">
+                            <span style="color: var(--accent-blue); font-size: 1.2rem;">📊</span>
+                            <div>
+                                <strong style="color: var(--text-primary);">Comparazione Versioni</strong> - Confronta facilmente le diverse versioni
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 0.8rem; background: rgba(255, 255, 255, 0.05); border-radius: 12px;">
+                            <span style="color: #ff6b6b; font-size: 1.2rem;">📧</span>
+                            <div>
+                                <strong style="color: var(--text-primary);">Notifiche Email</strong> - Sistema di notifiche automatiche
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 0.8rem; background: rgba(255, 255, 255, 0.05); border-radius: 12px;">
+                            <span style="color: #ffa500; font-size: 1.2rem;">🎨</span>
+                            <div>
+                                <strong style="color: var(--text-primary);">5 Temi Premium</strong> - Widget frontend personalizzabili
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 0.8rem; background: rgba(255, 255, 255, 0.05); border-radius: 12px;">
+                            <span style="color: var(--accent-neon); font-size: 1.2rem;">🛡️</span>
+                            <div>
+                                <strong style="color: var(--text-primary);">Supporto Prioritario</strong> - Assistenza dedicata
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PayPal Payment Section -->
+                <div class="paypal-container">
+                    <div class="price-badge">
+                        💎 49€ LIFETIME ACCESS
+                    </div>
+                    
+                    <h4 style="color: var(--text-primary); margin-bottom: 1rem; font-family: 'JetBrains Mono', monospace;">
+                        🚀 UPGRADE TO PRO - PAGAMENTO SICURO
+                    </h4>
+                    
+                    <div class="paypal-benefits">
+                        <div style="color: var(--accent-neon);">✓ Accesso Lifetime</div>
+                        <div style="color: var(--accent-blue);">✓ Tutte le Features PRO</div>
+                        <div style="color: var(--accent-purple);">✓ Aggiornamenti Gratuiti</div>
+                        <div style="color: #ffd700;">✓ Supporto Priority</div>
+                    </div>
+                    
+                    <!-- Sistema Automatico PayPal -->
+                    <div style="margin: 1.5rem 0;">
+                        <button onclick="showAutomaticSystem()" style="background: #0070e0; color: white; border: none; padding: 1.2rem 2.5rem; border-radius: 12px; font-size: 1.2rem; font-weight: 600; display: inline-block; transition: all 0.3s ease; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; cursor: pointer;" onmouseover="this.style.background='#005bb5'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(0, 112, 224, 0.3)'" onmouseout="this.style.background='#0070e0'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                            💳 ACQUISTA AUTOMATICO - 49€
+                        </button>
+                    </div>
+                    
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 1rem;">
+                        🤖 <strong>Sistema completamente automatico:</strong><br>
+                        ✅ Inserisci email → PayPal → Ricevi licenza + ZIP automaticamente<br>
+                        🔒 Pagamento sicuro con PayPal • 📧 Email istantanea • 💰 Soddisfatti o rimborsati
+                    </p>
+                </div>
+                
+                <div style="margin: 2rem 0;">
+                    <a href="https://wordpress.org/plugins/wp-changelog-manager/" target="_blank" class="cyber-btn cyber-btn-wp" style="font-size: 1.1rem;">
+                        🔗 VIEW_ON_WP.ORG
+                    </a>
+                    <br><br>
+                    <a href="mailto:sitworldweb@gmail.com?subject=Supporto WP Changelog Manager PRO" class="cyber-btn">
+                        💬 CONTACT_SUPPORT
+                    </a>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem; font-size: 0.9rem;">
+                    <div style="color: var(--accent-neon);">✓ Supporto Priority 24/7</div>
+                    <div style="color: var(--accent-blue);">✓ Updates Lifetime</div>
+                    <div style="color: var(--accent-purple);">✓ Setup Assistito</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Support & Community -->
+        <section style="padding: 2rem 0;">
+            <div class="glass-ultra" style="text-align: center;">
+                <h3 style="font-family: 'JetBrains Mono', monospace; color: var(--accent-blue); margin-bottom: 1.5rem; font-size: 1.8rem;">
+                    🤝 SUPPORT_&_COMMUNITY
+                </h3>
+                
+                <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 1.1rem;">
+                    Join our developer community for support, updates and exclusive content
+                </p>
+                
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="https://discord.gg/P5HRjAwgdZ" target="_blank" class="discord-btn">
+                        🎮 JOIN_DISCORD_SERVER
+                    </a>
+                    
+                    <a href="mailto:sitworldweb@gmail.com?subject=Support WP Changelog Manager Pro" class="cyber-btn">
+                        📧 EMAIL_SUPPORT
+                    </a>
+                </div>
+                
+                <div style="margin-top: 2rem; font-size: 0.9rem; color: var(--text-secondary);">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div>✓ Community Support 24/7</div>
+                        <div>✓ Beta Access Privileges</div>
+                        <div>✓ Direct Developer Contact</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </div>
+    
+    <!-- Footer -->
+    <footer style="padding: 3rem 0; border-top: 1px solid rgba(255, 255, 255, 0.1); margin-top: 4rem;">
+        <div class="container">
+            <div style="text-align: center; font-family: 'JetBrains Mono', monospace;">
+                <p style="color: var(--text-secondary);">
+                    &copy; 2024 <span class="neon-text">LORENZO_AGOSTA</span> 
+                    <span style="color: var(--accent-neon);">// WP_CHANGELOG_MANAGER_PRO</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // PayPal Button Configuration
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '50.00',
+                            currency_code: 'EUR'
+                        },
+                        description: 'WP Changelog Manager PRO - Lifetime License',
+                        payee: {
+                            email_address: 'agostafederico@gmail.com'
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    // Success message
+                    document.getElementById('paypal-button-container').innerHTML = `
+                        <div style="background: linear-gradient(45deg, var(--accent-neon), var(--accent-blue)); padding: 2rem; border-radius: 16px; color: white; text-align: center;">
+                            <h3 style="margin-bottom: 1rem;">🎉 PAGAMENTO COMPLETATO!</h3>
+                            <p style="margin-bottom: 1rem;">Grazie ${details.payer.name.given_name} per l'acquisto!</p>
+                            <p style="font-size: 0.9rem; opacity: 0.9;">Riceverai le istruzioni per il download via email entro 24 ore.</p>
+                            <p style="font-size: 0.8rem; margin-top: 1rem;">ID Transazione: ${details.id}</p>
+                        </div>
+                    `;
+                    
+                    // Send confirmation email
+                    fetch('mailto:sitworldweb@gmail.com?subject=Nuovo Acquisto WP Changelog Manager PRO&body=Nuovo acquisto completato!%0A%0ADettagli:%0ANome: ' + details.payer.name.given_name + '%0AEmail: ' + details.payer.email_address + '%0AID Transazione: ' + details.id + '%0AImporto: €50.00%0A%0AInviare licenza PRO al cliente.');
+                });
+            },
+            onError: function(err) {
+                console.error('PayPal Error:', err);
+                alert('Si è verificato un errore durante il pagamento. Riprova.');
+            },
+            style: {
+                color: 'blue',
+                shape: 'rect',
+                label: 'pay',
+                height: 50
+            }
+        }).render('#paypal-button-container');
+        
+        // Sistema automatico
+        function showAutomaticSystem() {
+            window.open('auto-license.html', '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+        }
+        
+        // Fallback if PayPal doesn't load
+        setTimeout(function() {
+            if (!document.querySelector('#paypal-button-container .paypal-buttons')) {
+                document.getElementById('paypal-button-container').innerHTML = `
+                    <button class="paypal-btn" onclick="window.open('https://paypal.me/agostafederico/50EUR', '_blank')">
+                        💳 PAY WITH PAYPAL - €50
+                    </button>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                        Clicca per aprire PayPal in una nuova finestra
+                    </p>
+                `;
+            }
+        }, 3000);
+    </script>
+</body>
+</html>

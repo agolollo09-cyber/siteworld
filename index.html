@@ -1,0 +1,550 @@
+﻿<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lorenzo Agosta - Ultra Modern Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Inter:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-card: rgba(18, 18, 18, 0.8);
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --accent-neon: #00ff88;
+            --accent-purple: #8b5cf6;
+            --accent-blue: #06b6d4;
+            --border-glow: rgba(0, 255, 136, 0.3);
+            --shadow-neon: 0 0 20px rgba(0, 255, 136, 0.1);
+        }
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: var(--bg-primary);
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(0, 255, 136, 0.1) 0%, transparent 50%);
+            color: var(--text-primary); 
+            margin: 0; 
+            padding: 50px 0 0 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Ubisoft-style Top Bar */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.95), rgba(17, 17, 17, 0.95));
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 1000;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .top-bar-logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-neon);
+        }
+
+        .top-bar-center {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .top-bar-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .top-bar-btn {
+            padding: 0.3rem 0.8rem;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--accent-neon);
+            border-radius: 15px;
+            color: var(--accent-neon);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .top-bar-btn:hover {
+            background: rgba(0, 255, 136, 0.2);
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+
+        .top-bar-btn.login {
+            background: linear-gradient(45deg, var(--accent-neon), var(--accent-blue));
+            border: none;
+            color: #000;
+            font-weight: 600;
+        }
+        
+        .container { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 0 2rem;
+        }
+        
+        .glass-ultra { 
+            background: var(--bg-card);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px; 
+            padding: 2rem; 
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glass-ultra::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-neon), transparent);
+            opacity: 0.5;
+        }
+        
+        .neon-text { 
+            background: linear-gradient(45deg, var(--accent-neon), var(--accent-blue), var(--accent-purple)); 
+            background-size: 300% 300%; 
+            -webkit-background-clip: text; 
+            background-clip: text;
+            -webkit-text-fill-color: transparent; 
+            animation: neonFlow 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.3));
+        }
+        
+        @keyframes neonFlow { 
+            0%, 100% { background-position: 0% 50%; } 
+            50% { background-position: 100% 50%; } 
+        }
+        
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+        }
+        
+        .hero-title { 
+            font-size: clamp(3rem, 8vw, 8rem);
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+            margin: 2rem 0; 
+            text-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            font-weight: 300;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .projects-section {
+            padding: 5rem 0;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 4rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .projects-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); 
+            gap: 2rem; 
+        }
+        
+        .project-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            overflow: hidden;
+        }
+        
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--accent-neon), var(--accent-purple));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 20px;
+            z-index: -1;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--shadow-neon);
+            border-color: var(--border-glow);
+        }
+        
+        .project-card:hover::before {
+            opacity: 0.1;
+        }
+        
+        .project-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .coming-soon-badge { 
+            background: linear-gradient(45deg, var(--accent-neon), var(--accent-blue));
+            padding: 0.5rem 1rem; 
+            border-radius: 20px; 
+            font-size: 0.8rem; 
+            font-weight: 600;
+            margin-left: 1rem;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        
+        .cyber-btn {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--accent-neon);
+            color: var(--accent-neon);
+            padding: 0.8rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            display: inline-block;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cyber-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .cyber-btn:hover {
+            background: rgba(0, 255, 136, 0.2);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .cyber-btn:hover::before {
+            left: 100%;
+        }
+        
+        .contact-section { 
+            text-align: center; 
+            padding: 4rem 0;
+        }
+        
+        .contact-section a { 
+            color: var(--accent-neon); 
+            font-size: 1.5rem; 
+            text-decoration: none; 
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-section a:hover {
+            text-shadow: 0 0 10px var(--accent-neon);
+            color: white;
+        }
+        
+        .discord-btn {
+            background: linear-gradient(45deg, #5865f2, #4752c4);
+            border: 1px solid #5865f2;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            display: inline-block;
+            margin: 1rem 0.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .discord-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(88, 101, 242, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .discord-btn:hover {
+            background: linear-gradient(45deg, #4752c4, #5865f2);
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .discord-btn:hover::before {
+            left: 100%;
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 0 1rem; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .hero-title { font-size: 4rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ubisoft-style Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-logo">
+            <img src="logo.png" alt="SITEWORLD Logo" style="height: 47px; vertical-align: middle; margin-right: 0.5rem;">
+        </div>
+        <div class="top-bar-center">
+            SITEWORLD ID ✨
+        </div>
+        <div class="top-bar-actions">
+            <a href="#" onclick="showComingSoon()" class="top-bar-btn">
+                ✨ Coming Soon
+            </a>
+            <a href="#" onclick="showSecretLogin()" class="top-bar-btn login">
+                🔑 LOGIN
+            </a>
+        </div>
+    </div>
+
+    <!-- Cyber Grid Background -->
+    <div class="cyber-grid"></div>
+    
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="neon-text">LORENZO</span><br>
+                    <span class="neon-text">AGOSTA</span>
+                </h1>
+                <p class="hero-subtitle">
+                    &gt; FULL_STACK_DEVELOPER.exe
+                </p>
+                <div class="glass-ultra">
+                    <p style="font-size: 1.2rem; font-family: 'JetBrains Mono', monospace; line-height: 1.6;">
+                        Architetto di soluzioni digitali ultra-moderne.<br>
+                        Specializzato in <span style="color: var(--accent-neon);">WordPress</span> e tecnologie <span style="color: var(--accent-purple);">next-gen</span>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Projects Section -->
+    <section class="projects-section">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="neon-text">PROGETTI</span>
+            </h2>
+            
+            <div class="projects-grid">
+                <!-- WP Changelog Manager Pro -->
+                <div class="project-card">
+                    <h3 class="project-title">WP Changelog Manager Pro</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.6;">
+                        Sistema avanzato di gestione changelog per WordPress. 
+                        Template personalizzabili, integrazione completa, performance ottimizzate.
+                    </p>
+                    <div style="margin-bottom: 1rem;">
+                        <span style="background: rgba(139, 92, 246, 0.2); color: var(--accent-purple); padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.8rem; margin-right: 0.5rem;">PHP</span>
+                        <span style="background: rgba(6, 182, 212, 0.2); color: var(--accent-blue); padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.8rem; margin-right: 0.5rem;">JavaScript</span>
+                        <span style="background: rgba(0, 255, 136, 0.2); color: var(--accent-neon); padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.8rem;">WordPress</span>
+                    </div>
+                    <a href="wp-changelog-manager.html" class="cyber-btn">ACCEDI_AL_SISTEMA</a>
+                </div>
+                
+                <!-- WP Maintenance Pro -->
+                <div class="project-card">
+                    <h3 class="project-title">
+                        WP Maintenance Pro
+                        <span class="coming-soon-badge">COMING_SOON</span>
+                    </h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.6;">
+                        Suite completa per manutenzione automatica WordPress. 
+                        Monitoraggio real-time, backup intelligenti, sicurezza avanzata.
+                    </p>
+                    <div style="margin-bottom: 1rem;">
+                        <span style="background: rgba(139, 92, 246, 0.2); color: var(--accent-purple); padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.8rem; margin-right: 0.5rem;">PHP</span>
+                        <span style="background: rgba(6, 182, 212, 0.2); color: var(--accent-blue); padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.8rem; margin-right: 0.5rem;">AI</span>
+                        <span style="background: rgba(0, 255, 136, 0.2); color: var(--accent-neon); padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.8rem;">WordPress</span>
+                    </div>
+                    <a href="wp-maintenance.html" class="cyber-btn">ANTEPRIMA_BETA</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Community Section -->
+    <section style="padding: 4rem 0;">
+        <div class="container">
+            <div class="glass-ultra" style="text-align: center;">
+                <h2 style="font-family: 'JetBrains Mono', monospace; margin-bottom: 2rem;">
+                    <span class="neon-text">&gt; COMMUNITY_&_SUPPORT</span>
+                </h2>
+                <p style="font-size: 1.1rem; margin-bottom: 2.5rem; color: var(--text-secondary); line-height: 1.6;">
+                    Join the developer community for support, beta access, and exclusive updates
+                </p>
+                
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;">
+                    <a href="https://discord.gg/P5HRjAwgdZ" target="_blank" class="discord-btn">
+                        🎮 JOIN_DISCORD
+                    </a>
+                    <a href="mailto:sitworldweb@gmail.com?subject=Support Request" class="cyber-btn">
+                        📧 EMAIL_SUPPORT
+                    </a>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; font-size: 0.9rem; color: var(--text-secondary);">
+                    <div style="color: var(--accent-neon);">✓ 24/7 Community Help</div>
+                    <div style="color: var(--accent-blue);">✓ Beta Testing Access</div>
+                    <div style="color: var(--accent-purple);">✓ Direct Developer Line</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section class="contact-section">
+        <div class="container">
+            <div class="glass-ultra">
+                <h2 style="font-family: 'JetBrains Mono', monospace; margin-bottom: 2rem;">
+                    <span class="neon-text">&gt; INIZIA_COLLABORAZIONE</span>
+                </h2>
+                <p style="font-size: 1.1rem; margin-bottom: 2rem; color: var(--text-secondary);">
+                    Hai un progetto innovativo? Connettiamoci.
+                </p>
+                <a href="mailto:sitworldweb@gmail.com">sitworldweb@gmail.com</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer style="padding: 2rem 0; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+        <div class="container">
+            <div style="text-align: center; font-family: 'JetBrains Mono', monospace;">
+                <p>&copy; 2024 <span class="neon-text">LORENZO_AGOSTA</span> // Ultra Modern Portfolio</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Coming Soon modal
+        function showComingSoon() {
+            window.location.href = 'siteworld-coming-soon.html';
+        }
+
+        // Secret admin access - solo per Lorenzo
+        let secretClicks = 0;
+        function showSecretLogin() {
+            secretClicks++;
+            
+            if (secretClicks === 1) {
+                alert('🔒 SITEWORLD ID è in Coming Soon...\n\n(Hint: prova ancora...)');
+            } else if (secretClicks === 2) {
+                alert('🤔 Insisti eh?\n\n(Un altro click...)');
+            } else if (secretClicks === 3) {
+                alert('🎯 Ultimo tentativo...\n\n(Sei sicuro?)');
+            } else if (secretClicks >= 4) {
+                const password = prompt('🔐 ACCESSO RISERVATO\n\nInserisci la password admin:');
+                if (password === 'lorenzo2025' || password === 'swid_dev_access') {
+                    alert('✅ Accesso autorizzato!\n\n🚀 Reindirizzamento alla dashboard...');
+                    window.location.href = 'siteworld-login.html';
+                } else if (password) {
+                    alert('❌ Password errata!\n\n🔒 Accesso negato.');
+                    secretClicks = 0;
+                } else {
+                    secretClicks = 0;
+                }
+            }
+        }
+
+        // Reset secret clicks after 10 seconds of inactivity
+        let resetTimer;
+        function resetSecretClicks() {
+            clearTimeout(resetTimer);
+            resetTimer = setTimeout(() => {
+                secretClicks = 0;
+            }, 10000);
+        }
+
+        // Reset timer on any click
+        document.addEventListener('click', resetSecretClicks);
+    </script>
+</body>
+</html>
