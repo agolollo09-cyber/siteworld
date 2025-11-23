@@ -776,24 +776,25 @@
                     event.target.disabled = true;
 
                     // Initialize EmailJS (sostituisci con le tue credenziali)
-                    emailjs.init("YOUR_EMAILJS_USER_ID");
+                    // ⚠️ SOSTITUIRE: User ID da dashboard.emailjs.com → Integration → Your Public Key
+                    emailjs.init("user_TUO_PUBLIC_KEY");
 
-                    // Prepara template parameters
+                    // Prepara template parameters (sintassi EmailJS corretta)
                     const templateParams = {
-                        to_email: license.email,
-                        customer_name: license.email.split('@')[0], // Nome dal email
+                        to_name: license.email.split('@')[0], // Nome destinatario
+                        to_email: license.email,               // Email destinatario (automatica)
+                        from_name: 'Admin SITEWORLD',          // Nome mittente
                         license_key: license.key,
                         product_name: 'WP Changelog Manager PRO',
                         purchase_date: new Date(license.createdAt || license.purchaseDate).toLocaleDateString('it-IT'),
                         download_link: 'https://agolollo09-cyber.github.io/Site-World/wp-changelog-manager.html',
-                        support_email: 'support@siteworld.it',
-                        admin_sender: 'Admin SITEWORLD'
+                        support_email: 'siteworldweb@gmail.com'
                     };
 
                     // Invia email
                     const response = await emailjs.send(
-                        'YOUR_SERVICE_ID',     // Sostituisci con tuo Service ID
-                        'YOUR_TEMPLATE_ID',    // Sostituisci con tuo Template ID  
+                        'service_TUO_SERVICE',     // Service ID da Email Services
+                        'resend_license_template', // Template ID da Email Templates  
                         templateParams
                     );
 
