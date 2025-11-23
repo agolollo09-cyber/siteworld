@@ -505,14 +505,26 @@
 
         async function checkLicenseStatus(licenseKey, showMessages = true) {
             try {
-                // Simulate API call delay
+                // API call to GitHub Pages hosted verification
                 if (showMessages) {
                     await new Promise(resolve => setTimeout(resolve, 1500));
                 }
                 
-                // Check license in simulated database
-                const licenses = JSON.parse(localStorage.getItem('wpcm_pro_licenses') || '[]');
-                const license = licenses.find(l => l.key === licenseKey);
+                // Try to verify with API first, fallback to localStorage for demo
+                let license = null;
+                try {
+                    const response = await fetch('https://agolollo09-cyber.github.io/Site-World/api/verify-license.json');
+                    const apiData = await response.json();
+                    license = apiData.licenses?.find(l => l.key === licenseKey);
+                } catch (apiError) {
+                    console.log('API fallback to localStorage for demo');
+                }
+                
+                // Fallback to localStorage for demo/development
+                if (!license) {
+                    const licenses = JSON.parse(localStorage.getItem('wpcm_pro_licenses') || '[]');
+                    license = licenses.find(l => l.key === licenseKey);
+                }
                 
                 if (!license) {
                     updateLicenseStatus('invalid', 'License key not found');
