@@ -6,6 +6,8 @@
     <title>🔐 License Manager PRO - Admin Panel</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
         :root {
             --bg-primary: #0a0a0a;
@@ -726,11 +728,15 @@
                 const licenseIndex = allLicenses.findIndex(l => l.key === licenseKey);
                 if (licenseIndex !== -1) {
                     allLicenses[licenseIndex].status = 'inactive';
+                    allLicenses[licenseIndex].suspensionReason = 'Admin deactivation - ' + new Date().toISOString();
                     
                     // Save to database
                     localStorage.setItem('wpcm_pro_licenses', JSON.stringify(allLicenses));
                     
-                    alert('❌ Licenza disattivata. Il plugin del cliente si disattiverà automaticamente.');
+                    // Send notification email to customer
+                    await sendDeactivationNotification(allLicenses[licenseIndex]);
+                    
+                    alert('❌ Licenza disattivata. Il plugin del cliente si disattiverà automaticamente.\n📧 Email di notifica inviata al cliente.');
                     renderLicenses();
                     updateStatistics();
                 }
@@ -764,13 +770,117 @@
             
             if (confirm(`📧 Reinviare email di licenza a ${license.email}?`)) {
                 try {
-                    // Simulate email sending
-                    alert('📧 Email reinviata con successo!\n\nIl cliente riceverà nuovamente il codice licenza e il file ZIP.');
-                    console.log('Resending email for license:', licenseKey);
+                    // Show loading
+                    const originalText = event.target.innerHTML;
+                    event.target.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Invio...';
+                    event.target.disabled = true;
+
+                    // Initialize EmailJS (sostituisci con le tue credenziali)
+                    emailjs.init("YOUR_EMAILJS_USER_ID");
+
+                    // Prepara template parameters
+                    const templateParams = {
+                        to_email: license.email,
+                        customer_name: license.email.split('@')[0], // Nome dal email
+                        license_key: license.key,
+                        product_name: 'WP Changelog Manager PRO',
+                        purchase_date: new Date(license.createdAt || license.purchaseDate).toLocaleDateString('it-IT'),
+                        download_link: 'https://agolollo09-cyber.github.io/Site-World/wp-changelog-manager.html',
+                        support_email: 'support@siteworld.it',
+                        admin_sender: 'Admin SITEWORLD'
+                    };
+
+                    // Invia email
+                    const response = await emailjs.send(
+                        'YOUR_SERVICE_ID',     // Sostituisci con tuo Service ID
+                        'YOUR_TEMPLATE_ID',    // Sostituisci con tuo Template ID  
+                        templateParams
+                    );
+
+                    // Successo
+                    alert(`📧 Email reinviata con successo!\n\nDestinatario: ${license.email}\nLicenza: ${license.key}\n\nIl cliente riceverà nuovamente il codice licenza e le istruzioni di download.`);
+                    
+                    // Log for admin
+                    console.log('✅ Email sent successfully:', {
+                        emailjs_response: response,
+                        license: licenseKey,
+                        recipient: license.email,
+                        timestamp: new Date().toISOString()
+                    });
+
+                    // Restore button
+                    event.target.innerHTML = originalText;
+                    event.target.disabled = false;
+                    
                 } catch (error) {
-                    console.error('Error resending email:', error);
-                    alert('❌ Errore nell\'invio email');
+                    console.error('❌ EmailJS Error:', error);
+                    
+                    // Restore button
+                    event.target.innerHTML = originalText;
+                    event.target.disabled = false;
+                    
+                    // Error message with details
+                    alert(`❌ Errore nell'invio email\n\nDettagli: ${error.text || error.message}\n\nVerifica:\n1. Credenziali EmailJS corrette\n2. Template configurato\n3. Connessione internet\n\nContatta supporto se il problema persiste.`);
                 }
+            }
+        }
+
+        async function sendDeactivationNotification(license) {
+            try {
+                // Initialize EmailJS 
+                emailjs.init("YOUR_EMAILJS_USER_ID");
+
+                const templateParams = {
+                    to_email: license.email,
+                    customer_name: license.email.split('@')[0],
+                    license_key: license.key,
+                    product_name: 'WP Changelog Manager PRO',
+                    deactivation_date: new Date().toLocaleDateString('it-IT'),
+                    reason: 'Licenza sospesa per violazione termini di servizio o pagamento ritirato',
+                    support_email: 'support@siteworld.it',
+                    website: 'https://agolollo09-cyber.github.io/Site-World'
+                };
+
+                await emailjs.send(
+                    'YOUR_SERVICE_ID',
+                    'deactivation_template', // Template per notifica disattivazione
+                    templateParams
+                );
+
+                console.log('✅ Deactivation notification sent to:', license.email);
+                
+            } catch (error) {
+                console.error('⚠️ Could not send deactivation notification:', error);
+                // Non bloccare il processo se l'email fallisce
+            }
+        }
+
+        async function sendWelcomeEmail(license) {
+            try {
+                // Initialize EmailJS
+                emailjs.init("YOUR_EMAILJS_USER_ID");
+
+                const templateParams = {
+                    to_email: license.email,
+                    customer_name: license.email.split('@')[0],
+                    license_key: license.key,
+                    product_name: 'WP Changelog Manager PRO',
+                    purchase_date: new Date().toLocaleDateString('it-IT'),
+                    download_link: 'https://agolollo09-cyber.github.io/Site-World/wp-changelog-manager.html',
+                    admin_url: 'https://agolollo09-cyber.github.io/Site-World/plugin-simulator.html',
+                    support_email: 'support@siteworld.it'
+                };
+
+                await emailjs.send(
+                    'YOUR_SERVICE_ID',
+                    'welcome_template', // Template per email di benvenuto
+                    templateParams
+                );
+
+                console.log('✅ Welcome email sent to:', license.email);
+                
+            } catch (error) {
+                console.error('⚠️ Could not send welcome email:', error);
             }
         }
 
