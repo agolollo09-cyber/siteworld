@@ -37,8 +37,13 @@ secrets.txt
 *.backup
 backup/
 
-# Mantieni le cartelle API ma ignora i file temporanei dentro
-api/*.json
-api/*.txt
+# Mantieni le cartelle API ma ignora solo i file temporanei
+api/licenses_database_temp.json
+api/rate_limit.txt
+api/verification_log.txt
+api/sync_log.txt
+!api/verify-license.json
+!api/admin-stats.json
+!api/license-database.json
 !api/verify-license.php
 !api/sync-licenses.php

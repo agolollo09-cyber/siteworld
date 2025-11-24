@@ -1,0 +1,66 @@
+{
+  "status": "success",
+  "apiVersion": "1.0",
+  "domain": "https://agolollo09-cyber.github.io/Site-World", 
+  "endpoint": "license-database",
+  "timestamp": "2025-11-23T12:00:00Z",
+  "requiresAuth": true,
+  "database": {
+    "licenses": [
+      {
+        "key": "WPCM-PRO-DEMO-LIVE-2025",
+        "email": "demo@siteworld.it",
+        "purchaseDate": "2025-11-23T12:00:00Z",
+        "status": "active",
+        "product": "WP Changelog Manager PRO",
+        "price": 49,
+        "paymentId": "LIVE-DEMO-001",
+        "expiresAt": null,
+        "activations": 1,
+        "maxActivations": 3,
+        "lastCheck": "2025-11-23T12:00:00Z",
+        "activatedDomains": ["example.com"],
+        "suspensionReason": null,
+        "fraudScore": 0
+      },
+      {
+        "key": "WPCM-PRO-TEST-LIVE-2025", 
+        "email": "test@example.com",
+        "purchaseDate": "2025-11-23T11:30:00Z",
+        "status": "active",
+        "product": "WP Changelog Manager PRO",
+        "price": 49,
+        "paymentId": "LIVE-TEST-002",
+        "expiresAt": null,
+        "activations": 0,
+        "maxActivations": 3,
+        "lastCheck": null,
+        "activatedDomains": [],
+        "suspensionReason": null,
+        "fraudScore": 0
+      },
+      {
+        "key": "WPCM-PRO-FRAUD-DEMO-001",
+        "email": "fraud@test.com",
+        "purchaseDate": "2025-11-23T10:00:00Z",
+        "status": "suspended",
+        "product": "WP Changelog Manager PRO",
+        "price": 49,
+        "paymentId": "FRAUD-001",
+        "expiresAt": null,
+        "activations": 5,
+        "maxActivations": 3,
+        "lastCheck": "2025-11-23T11:45:00Z",
+        "activatedDomains": ["fraud1.com", "fraud2.com", "fraud3.com", "fraud4.com", "fraud5.com"],
+        "suspensionReason": "Exceeded maximum activations",
+        "fraudScore": 95
+      }
+    ]
+  },
+  "metadata": {
+    "totalCount": 3,
+    "activeCount": 2,
+    "suspendedCount": 1,
+    "lastSync": "2025-11-23T12:00:00Z"
+  }
+}
