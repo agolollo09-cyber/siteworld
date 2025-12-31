@@ -32,6 +32,12 @@ config.local.php
 .env
 secrets.txt
 
+#Ignora file di sviluppo
+siteworld-coming-soon.html
+siteworld-login.html
+siteworld-register.html
+beta-dashboard.html
+admin-dashboard.html
 # Ignora file di backup
 *.bak
 *.backup
