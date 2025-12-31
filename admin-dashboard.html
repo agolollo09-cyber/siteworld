@@ -14,6 +14,7 @@
             --text-primary: #ffffff;
             --text-secondary: #a0a0a0;
             --accent-cyan: #06b6d4;
+            --accent-blue: #3b82f6;
             --accent-purple: #8b5cf6;
             --accent-green: #00ff88;
             --accent-red: #ff4444;
@@ -376,6 +377,67 @@
             border-color: var(--accent-purple);
         }
 
+        .cyber-btn {
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-blue));
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .cyber-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(6, 182, 212, 0.4);
+        }
+
+        .cyber-btn-secondary {
+            background: linear-gradient(45deg, var(--accent-purple), var(--accent-yellow));
+            color: #000;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .cyber-btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+        }
+
         .notification-badge {
             background: var(--accent-red);
             color: white;
@@ -649,6 +711,7 @@
                 <div class="tab active" onclick="showTab('announcements')">
                     📢 Gestione Annunci
                 </div>
+
                 <div class="tab" onclick="showTab('feedbacks')">
                     🐛 Segnalazioni Beta
                     <span class="notification-badge" id="feedbackNotificationBadge">0</span>
@@ -664,9 +727,7 @@
                 </div>
             </div>
             
-            <button class="btn" onclick="window.open('license-admin.html', '_blank')" style="background: linear-gradient(45deg, var(--accent-purple), var(--accent-cyan)); white-space: nowrap; padding: 0.8rem 1.5rem;">
-                🔐 License Manager PRO
-            </button>
+
         </div>
 
         <!-- Announcements Tab -->
@@ -702,6 +763,8 @@
                 </div>
             </div>
         </div>
+
+
 
         <!-- Feedbacks Tab -->
         <div id="feedbacks" class="tab-content">
@@ -1226,6 +1289,372 @@
                 localStorage.setItem('siteworld_feedbacks', JSON.stringify(feedbacks));
                 updateNotificationBadge();
             }
+        }
+    </script>
+    
+    <!-- SiteWorld Store API Integration -->
+    <script src="siteworld-store-api.js"></script>
+    
+    <script>
+        // Store Management Functions
+        // Store functionality removed - now free and open source
+        
+        // Load store data for web admin
+        async function loadWebStoreData() {
+            if (!window.storeAPI) {
+                console.warn('Store API not initialized');
+                showWebNotification('⚠️ Store API non inizializzato', 'error');
+                return;
+            }
+            
+            try {
+                const stats = await window.storeAPI.getStoreStats();
+                updateWebStoreStats(stats);
+                
+                const products = await window.storeAPI.getProducts('all');
+                updateWebProductsList(products);
+                
+                console.log('🛒 Store data loaded for web admin');
+            } catch (error) {
+                console.error('Error loading store data:', error);
+                showWebNotification('❌ Errore nel caricamento dati store', 'error');
+            }
+        }
+        
+        // Update store statistics
+        function updateWebStoreStats(stats) {
+            document.getElementById('webTotalProducts').textContent = stats.totalProducts || 0;
+            document.getElementById('webTotalSales').textContent = `€${(stats.totalSales || 0).toLocaleString()}`;
+            document.getElementById('webTotalDownloads').textContent = (stats.totalDownloads || 0).toLocaleString();
+            document.getElementById('webAverageRating').textContent = (stats.averageRating || 0).toFixed(1);
+        }
+        
+        // Add new product to store
+        async function addProductToStore() {
+            const name = document.getElementById('webProductName').value.trim();
+            const category = document.getElementById('webProductCategory').value;
+            const description = document.getElementById('webProductDescription').value.trim();
+            const price = parseInt(document.getElementById('webProductPrice').value);
+            const originalPrice = parseInt(document.getElementById('webProductOriginalPrice').value);
+            const icon = document.getElementById('webProductIcon').value;
+            const badge = document.getElementById('webProductBadge').value;
+            const featuresText = document.getElementById('webProductFeatures').value.trim();
+            
+            // Validation
+            if (!name || !description || !price || !originalPrice || !featuresText) {
+                showWebNotification('⚠️ Compila tutti i campi obbligatori', 'error');
+                return;
+            }
+            
+            if (price >= originalPrice) {
+                showWebNotification('⚠️ Il prezzo deve essere inferiore al prezzo originale', 'error');
+                return;
+            }
+            
+            const features = featuresText.split('\n')
+                .map(f => f.trim())
+                .filter(f => f.length > 0)
+                .slice(0, 8);
+            
+            if (features.length === 0) {
+                showWebNotification('⚠️ Inserisci almeno una caratteristica', 'error');
+                return;
+            }
+            
+            try {
+                const productData = {
+                    name,
+                    description,
+                    category,
+                    price,
+                    originalPrice,
+                    icon,
+                    badge,
+                    features
+                };
+                
+                const newProduct = await window.storeAPI.addProduct(productData);
+                
+                // Reset form
+                document.getElementById('webProductName').value = '';
+                document.getElementById('webProductDescription').value = '';
+                document.getElementById('webProductPrice').value = '';
+                document.getElementById('webProductOriginalPrice').value = '';
+                document.getElementById('webProductFeatures').value = '';
+                
+                // Reload data
+                await loadWebStoreData();
+                
+                showWebNotification(`🛒 ${name} aggiunto al SiteWorld Store con successo!`, 'success');
+                
+            } catch (error) {
+                console.error('Error adding product:', error);
+                showWebNotification('❌ Errore nell\'aggiunta del prodotto', 'error');
+            }
+        }
+        
+        // Update products list for web admin
+        async function updateWebProductsList(products) {
+            const container = document.getElementById('webStoreProductsList');
+            
+            if (!products || products.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                        <i class="fas fa-store" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+                        <p>Nessun prodotto nel store</p>
+                        <p style="font-size: 0.9rem;">Aggiungi il primo prodotto usando il form sopra!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const filteredProducts = currentWebFilter === 'all' ? 
+                products : products.filter(p => p.category === currentWebFilter);
+            
+            container.innerHTML = filteredProducts.map(product => {
+                const discount = Math.round((1 - product.price/product.originalPrice) * 100);
+                const revenue = (product.downloads || 0) * product.price;
+                
+                return `
+                    <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(0, 255, 255, 0.2); margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                    <span style="font-size: 1.5rem;">${product.icon}</span>
+                                    <h4 style="color: var(--accent-cyan); margin: 0;">${product.name}</h4>
+                                    <span style="background: linear-gradient(45deg, var(--accent-yellow), #ff6b35); color: #000; padding: 0.2rem 0.6rem; border-radius: 10px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;">${product.badge}</span>
+                                </div>
+                                
+                                <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.9rem; line-height: 1.4;">${product.description}</p>
+                                
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+                                    <div>
+                                        <div style="font-size: 0.8rem; color: var(--text-secondary);">Prezzo</div>
+                                        <div style="color: var(--accent-green); font-family: 'JetBrains Mono'; font-weight: 700;">
+                                            €${product.price}
+                                            <span style="color: var(--text-secondary); text-decoration: line-through; font-size: 0.8rem; margin-left: 0.5rem;">€${product.originalPrice}</span>
+                                            <span style="background: var(--accent-red); color: white; padding: 0.1rem 0.4rem; border-radius: 6px; font-size: 0.6rem; margin-left: 0.5rem;">-${discount}%</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 0.8rem; color: var(--text-secondary);">Downloads</div>
+                                        <div style="color: var(--accent-blue); font-family: 'JetBrains Mono'; font-weight: 700;">${(product.downloads || 0).toLocaleString()}</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 0.8rem; color: var(--text-secondary);">Rating</div>
+                                        <div style="color: var(--accent-yellow); font-family: 'JetBrains Mono'; font-weight: 700;">⭐ ${product.rating}</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 0.8rem; color: var(--text-secondary);">Revenue</div>
+                                        <div style="color: var(--accent-purple); font-family: 'JetBrains Mono'; font-weight: 700;">€${revenue.toLocaleString()}</div>
+                                    </div>
+                                </div>
+                                
+                                <div style="margin-bottom: 1rem;">
+                                    <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Caratteristiche:</div>
+                                    <div style="font-size: 0.8rem; color: var(--text-primary);">
+                                        ${product.features.slice(0, 3).map(f => `✅ ${f}`).join(' • ')}
+                                        ${product.features.length > 3 ? ` (+${product.features.length - 3} altre)` : ''}
+                                    </div>
+                                </div>
+                                
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                                    📂 ${product.category} • 📅 ${new Date(product.dateAdded).toLocaleDateString('it-IT')}
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-left: 1rem;">
+                                <button onclick="editWebProduct(${product.id})" style="background: var(--accent-blue); color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 0.3rem;">
+                                    <i class="fas fa-edit"></i>
+                                    MODIFICA
+                                </button>
+                                <button onclick="removeWebProduct(${product.id}, '${product.name}')" style="background: var(--accent-red); color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 0.3rem;">
+                                    <i class="fas fa-trash"></i>
+                                    RIMUOVI
+                                </button>
+                                <button onclick="duplicateWebProduct(${product.id})" style="background: var(--accent-purple); color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 0.3rem;">
+                                    <i class="fas fa-copy"></i>
+                                    DUPLICA
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Filter products by category
+        async function filterWebProducts() {
+            const filter = document.getElementById('webCategoryFilter').value;
+            currentWebFilter = filter;
+            
+            try {
+                const products = await window.storeAPI.getProducts(filter);
+                await updateWebProductsList(products);
+                showWebNotification(`📂 Filtro applicato: ${filter === 'all' ? 'Tutte le categorie' : filter}`, 'info');
+            } catch (error) {
+                console.error('Error filtering products:', error);
+            }
+        }
+        
+        // Remove product from store
+        async function removeWebProduct(productId, productName) {
+            if (confirm(`Sei sicuro di voler rimuovere "${productName}" dal store?\n\nQuesta azione non può essere annullata.`)) {
+                try {
+                    await window.storeAPI.removeProduct(productId);
+                    await loadWebStoreData();
+                    showWebNotification(`🗑️ ${productName} rimosso dal store`, 'success');
+                } catch (error) {
+                    console.error('Error removing product:', error);
+                    showWebNotification('❌ Errore nella rimozione del prodotto', 'error');
+                }
+            }
+        }
+        
+        // Edit product (populate form)
+        async function editWebProduct(productId) {
+            try {
+                const product = await window.storeAPI.getProduct(productId);
+                if (product) {
+                    // Populate form
+                    document.getElementById('webProductName').value = product.name;
+                    document.getElementById('webProductCategory').value = product.category;
+                    document.getElementById('webProductDescription').value = product.description;
+                    document.getElementById('webProductPrice').value = product.price;
+                    document.getElementById('webProductOriginalPrice').value = product.originalPrice;
+                    document.getElementById('webProductIcon').value = product.icon;
+                    document.getElementById('webProductBadge').value = product.badge;
+                    document.getElementById('webProductFeatures').value = product.features.join('\n');
+                    
+                    // Remove existing product and show message
+                    await window.storeAPI.removeProduct(productId);
+                    await loadWebStoreData();
+                    
+                    // Scroll to form
+                    document.getElementById('webProductName').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    document.getElementById('webProductName').focus();
+                    
+                    showWebNotification(`✏️ Modifica "${product.name}" e clicca "AGGIUNGI" per salvare`, 'info');
+                }
+            } catch (error) {
+                console.error('Error editing product:', error);
+                showWebNotification('❌ Errore nel caricamento del prodotto', 'error');
+            }
+        }
+        
+        // Duplicate product
+        async function duplicateWebProduct(productId) {
+            try {
+                const product = await window.storeAPI.getProduct(productId);
+                if (product) {
+                    const duplicatedProduct = {
+                        ...product,
+                        name: product.name + ' (Copia)',
+                        id: undefined // Let API generate new ID
+                    };
+                    
+                    await window.storeAPI.addProduct(duplicatedProduct);
+                    await loadWebStoreData();
+                    
+                    showWebNotification(`📋 ${product.name} duplicato con successo!`, 'success');
+                }
+            } catch (error) {
+                console.error('Error duplicating product:', error);
+                showWebNotification('❌ Errore nella duplicazione del prodotto', 'error');
+            }
+        }
+        
+        // Refresh store data
+        async function refreshStoreData() {
+            showWebNotification('🔄 Aggiornamento dati store...', 'info');
+            try {
+                await window.storeAPI.syncWithDesktopApp();
+                await loadWebStoreData();
+                showWebNotification('✅ Dati aggiornati con successo!', 'success');
+            } catch (error) {
+                console.error('Error refreshing data:', error);
+                showWebNotification('❌ Errore nell\'aggiornamento dati', 'error');
+            }
+        }
+        
+        // Open store in new tab
+        function openStoreInNewTab() {
+            window.open('siteworld-store.html', '_blank');
+            showWebNotification('🌐 Store aperto in una nuova scheda', 'info');
+        }
+        
+        // Export store data
+        async function exportStoreData() {
+            try {
+                const analytics = await window.storeAPI.exportAnalytics();
+                
+                const dataStr = JSON.stringify(analytics, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                
+                const exportFileDefaultName = `siteworld-store-analytics-${new Date().toISOString().split('T')[0]}.json`;
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+                
+                showWebNotification('📊 Analytics esportate con successo!', 'success');
+            } catch (error) {
+                console.error('Error exporting data:', error);
+                showWebNotification('❌ Errore nell\'esportazione dati', 'error');
+            }
+        }
+        
+        // Web notification system
+        function showWebNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'var(--accent-green)' : 
+                           type === 'error' ? 'var(--accent-red)' : 
+                           type === 'info' ? 'var(--accent-cyan)' : 'var(--accent-purple)'};
+                color: ${type === 'success' || type === 'info' ? '#000' : '#fff'};
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                font-weight: 600;
+                z-index: 10000;
+                max-width: 350px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+                font-family: 'JetBrains Mono', monospace;
+                animation: slideInRight 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Remove after 4 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease-out';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 4000);
+        }
+        
+        // Add CSS animations for notifications
+        if (!document.getElementById('webNotificationStyles')) {
+            const style = document.createElement('style');
+            style.id = 'webNotificationStyles';
+            style.textContent = `
+                @keyframes slideInRight {
+                    from { opacity: 0; transform: translateX(100px); }
+                    to { opacity: 1; transform: translateX(0); }
+                }
+                @keyframes slideOutRight {
+                    from { opacity: 1; transform: translateX(0); }
+                    to { opacity: 0; transform: translateX(100px); }
+                }
+            `;
+            document.head.appendChild(style);
         }
     </script>
 </body>

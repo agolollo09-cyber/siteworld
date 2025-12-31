@@ -37,6 +37,9 @@ secrets.txt
 *.backup
 backup/
 
+# Ignora la desktop app
+desktop-app/
+
 # Mantieni le cartelle API ma ignora solo i file temporanei
 api/licenses_database_temp.json
 api/rate_limit.txt

@@ -367,17 +367,23 @@
     <!-- Ubisoft-style Top Bar -->
     <div class="top-bar">
         <div class="top-bar-logo">
-            <img src="logo.png" alt="SITEWORLD Logo" style="height: 47px; vertical-align: middle; margin-right: 0.5rem;">
+            <img src="logo.png" alt="Lorenzo Agosta Logo" style="height: 47px; vertical-align: middle; margin-right: 0.5rem;">
         </div>
         <div class="top-bar-center">
-            SITEWORLD ID ✨
+            LORENZO AGOSTA ✨ DEVELOPER
         </div>
         <div class="top-bar-actions">
-            <a href="#" onclick="showComingSoon()" class="top-bar-btn">
-                ✨ Coming Soon
+            <a href="#blog" class="top-bar-btn">
+                📝 BLOG
             </a>
-            <a href="#" onclick="showSecretLogin()" class="top-bar-btn login">
-                🔑 LOGIN
+            <a href="roadmap.html" class="top-bar-btn">
+                🗺️ ROADMAP
+            </a>
+            <a href="#projects" class="top-bar-btn">
+                🚀 PROGETTI
+            </a>
+            <a href="#contact" class="top-bar-btn">
+                📧 CONTATTI
             </a>
         </div>
     </div>
@@ -407,7 +413,7 @@
     </section>
     
     <!-- Projects Section -->
-    <section class="projects-section">
+    <section id="projects" class="projects-section">
         <div class="container">
             <h2 class="section-title">
                 <span class="neon-text">PROGETTI</span>
@@ -450,6 +456,56 @@
         </div>
     </section>
     
+    <!-- Blog Section -->
+    <section id="blog" style="padding: 5rem 0;">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="neon-text">DEV_BLOG</span>
+            </h2>
+            
+            <div class="glass-ultra" style="text-align: center; margin-bottom: 3rem;">
+                <p style="font-size: 1.2rem; color: var(--text-secondary); line-height: 1.6;">
+                    Insights, tutorials, e updates dal mondo dello sviluppo.<br>
+                    <span style="color: var(--accent-neon);">Tutto gratuito, sempre.</span>
+                </p>
+            </div>
+            
+            <div class="projects-grid">
+                <!-- Latest Blog Posts will be loaded here dynamically -->
+                <div class="project-card">
+                    <h3 class="project-title">Coming Soon</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.6;">
+                        Il sistema di blog è in fase di sviluppo. Presto qui troverai tutorial, 
+                        guide e insights sullo sviluppo di plugin WordPress e molto altro.
+                    </p>
+                    <div style="margin-bottom: 1rem;">
+                        <span style="background: rgba(0, 255, 136, 0.2); color: var(--accent-neon); padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.8rem; margin-right: 0.5rem;">WordPress</span>
+                        <span style="background: rgba(139, 92, 246, 0.2); color: var(--accent-purple); padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.8rem; margin-right: 0.5rem;">PHP</span>
+                        <span style="background: rgba(6, 182, 212, 0.2); color: var(--accent-blue); padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.8rem;">JavaScript</span>
+                    </div>
+                    <div class="cyber-btn" style="background: rgba(0, 255, 136, 0.1); cursor: default;">
+                        📝 PRESTO_DISPONIBILE
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <h3 class="project-title">Newsletter Dev</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.6;">
+                        Resta aggiornato su tutti i nuovi progetti, tutorial e risorse.
+                        Newsletter settimanale dedicata agli sviluppatori.
+                    </p>
+                    <div style="margin-bottom: 1rem;">
+                        <span style="background: rgba(255, 215, 0, 0.2); color: #ffd700; padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.8rem; margin-right: 0.5rem;">Newsletter</span>
+                        <span style="background: rgba(0, 255, 136, 0.2); color: var(--accent-neon); padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.8rem;">Free</span>
+                    </div>
+                    <a href="mailto:sitworldweb@gmail.com?subject=Iscrizione Newsletter" class="cyber-btn">
+                        📬 ISCRIVITI_GRATIS
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
     <!-- Community Section -->
     <section style="padding: 4rem 0;">
         <div class="container">
@@ -480,7 +536,7 @@
     </section>
     
     <!-- Contact Section -->
-    <section class="contact-section">
+    <section id="contact" class="contact-section">
         <div class="container">
             <div class="glass-ultra">
                 <h2 style="font-family: 'JetBrains Mono', monospace; margin-bottom: 2rem;">
@@ -504,47 +560,23 @@
     </footer>
 
     <script>
-        // Coming Soon modal
-        function showComingSoon() {
-            window.location.href = 'siteworld-coming-soon.html';
-        }
-
-        // Secret admin access - solo per Lorenzo
-        let secretClicks = 0;
-        function showSecretLogin() {
-            secretClicks++;
-            
-            if (secretClicks === 1) {
-                alert('🔒 SITEWORLD ID è in Coming Soon...\n\n(Hint: prova ancora...)');
-            } else if (secretClicks === 2) {
-                alert('🤔 Insisti eh?\n\n(Un altro click...)');
-            } else if (secretClicks === 3) {
-                alert('🎯 Ultimo tentativo...\n\n(Sei sicuro?)');
-            } else if (secretClicks >= 4) {
-                const password = prompt('🔐 ACCESSO RISERVATO\n\nInserisci la password admin:');
-                if (password === 'lorenzo2025' || password === 'swid_dev_access') {
-                    alert('✅ Accesso autorizzato!\n\n🚀 Reindirizzamento alla dashboard...');
-                    window.location.href = 'siteworld-login.html';
-                } else if (password) {
-                    alert('❌ Password errata!\n\n🔒 Accesso negato.');
-                    secretClicks = 0;
-                } else {
-                    secretClicks = 0;
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                 }
-            }
-        }
-
-        // Reset secret clicks after 10 seconds of inactivity
-        let resetTimer;
-        function resetSecretClicks() {
-            clearTimeout(resetTimer);
-            resetTimer = setTimeout(() => {
-                secretClicks = 0;
-            }, 10000);
-        }
-
-        // Reset timer on any click
-        document.addEventListener('click', resetSecretClicks);
+            });
+        });
+        
+        // Blog loading animation (placeholder for future dynamic content)
+        console.log('🚀 Lorenzo Agosta - Developer Portfolio Loaded');
+        console.log('📝 Blog system in development...');
     </script>
 </body>
 </html>
