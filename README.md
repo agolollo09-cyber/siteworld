@@ -21,20 +21,6 @@ Hi! I'm Lorenzo Agosta, a passionate developer creating innovative tools and sol
 - **GitHub**: [View Plugin Repository](#)
 - **WordPress.org**: [Download Plugin](https://wordpress.org/plugins/wp-changelog-manager/)
 
-### 🛠️ Desktop Applications
-- **SiteWorld Desktop Suite** - Comprehensive development tools
-- **Project Management** - Advanced workflow automation
-- **Multi-Platform Support** - Windows, Mac, Linux compatible
-
-## 🎯 Mission
-
-Creating powerful, accessible software that empowers developers and businesses without financial barriers. Every tool I build is designed with:
-
-- ✅ **Zero Cost** - Completely free forever
-- ✅ **Open Source** - Transparent, community-driven development  
-- ✅ **Professional Quality** - Enterprise-grade features and reliability
-- ✅ **Continuous Updates** - Regular improvements and new features
-- ✅ **Community Support** - Active Discord community and email support
 
 ## 🤝 Support the Project
 
@@ -58,6 +44,6 @@ All projects are licensed under MIT License - see individual project files for d
 
 ---
 
-*"Great software should be accessible to everyone. That's why everything I create is free and open source."*
+
 
 **© 2024 Lorenzo Agosta - Free & Open Source Developer**
