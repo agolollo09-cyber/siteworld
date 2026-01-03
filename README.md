@@ -4,9 +4,8 @@
 
 ## About Me
 
-Hi! I'm Lorenzo Agosta, a passionate developer creating innovative tools and solutions. All my projects are now **completely free and open source** - no paywalls, no premium versions, just quality software for everyone.
+Hi! I'm Lorenzo Agosta, a passionate developer creating innovative tools and solutions.
 
-## Featured Projects
 
 ### 🎨 Portfolio Website
 - **Modern Developer Portfolio** - Sleek, responsive design showcasing my work
